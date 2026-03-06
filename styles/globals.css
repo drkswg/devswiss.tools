@@ -1,0 +1,206 @@
+@import './tokens.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top, rgba(127, 186, 246, 0.12), transparent 34%),
+    radial-gradient(circle at 85% 20%, rgba(246, 178, 107, 0.12), transparent 24%),
+    linear-gradient(180deg, #18191d 0%, var(--color-bg-canvas) 55%, #17181c 100%);
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-body, "Segoe UI", sans-serif);
+  line-height: 1.5;
+  background: transparent;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(135deg, rgba(127, 186, 246, 0.06), transparent 28%),
+    linear-gradient(315deg, rgba(150, 211, 140, 0.05), transparent 25%);
+  content: '';
+  pointer-events: none;
+}
+
+main {
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono, monospace);
+}
+
+::selection {
+  color: var(--color-text-inverse);
+  background: rgba(243, 214, 107, 0.85);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+:where(a, button, input, select, textarea, [role='button'], summary):focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-accent-blue) 78%, white);
+  outline-offset: 2px;
+}
+
+a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.22em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-family: var(--font-display, "Segoe UI", sans-serif);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+p,
+ul,
+ol,
+dl,
+blockquote {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding-left: 1.1rem;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  background: var(--color-bg-field);
+  transition:
+    border-color var(--transition-standard),
+    background-color var(--transition-standard),
+    box-shadow var(--transition-standard);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: var(--color-border-strong);
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  border-color: var(--color-info);
+}
+
+.site-shell {
+  width: min(100% - 2rem, var(--max-shell-width));
+  margin: 0 auto;
+}
+
+.surface-card {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(49, 52, 60, 0.78), rgba(31, 33, 39, 0.92));
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(18px);
+}
+
+.section-heading {
+  display: grid;
+  gap: var(--space-sm);
+  max-width: var(--max-copy-width);
+}
+
+.section-eyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-yellow);
+}
+
+.section-copy {
+  color: var(--color-text-secondary);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 720px) {
+  .site-shell {
+    width: min(100% - 1.25rem, var(--max-shell-width));
+  }
+
+  .section-heading {
+    gap: var(--space-xs);
+  }
+
+  .surface-card {
+    border-radius: var(--radius-md);
+  }
+}

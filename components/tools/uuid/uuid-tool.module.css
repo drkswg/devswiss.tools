@@ -1,0 +1,49 @@
+.layout {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.panel {
+  display: grid;
+  gap: var(--space-xl);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.panelHeader {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.modeSwitch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.splitFields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+@media (max-width: 720px) {
+  .splitFields {
+    grid-template-columns: 1fr;
+  }
+
+  .modeSwitch,
+  .actions {
+    display: grid;
+  }
+}

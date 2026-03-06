@@ -1,0 +1,18 @@
+.wrapper {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--space-lg);
+}
+
+.empty {
+  padding: 1.25rem;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.02);
+}

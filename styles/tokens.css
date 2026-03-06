@@ -1,0 +1,62 @@
+:root {
+  --color-bg-canvas: #1e1f22;
+  --color-bg-surface: #25262c;
+  --color-bg-surface-strong: #2b2d33;
+  --color-bg-elevated: #31343c;
+  --color-bg-field: #1b1d22;
+  --color-bg-overlay: rgba(18, 20, 24, 0.78);
+
+  --color-border-subtle: rgba(232, 237, 240, 0.1);
+  --color-border-strong: rgba(232, 237, 240, 0.2);
+  --color-border-accent: rgba(255, 193, 121, 0.3);
+
+  --color-text-primary: #f4f6fb;
+  --color-text-secondary: #c0c7d1;
+  --color-text-muted: #8e96a3;
+  --color-text-inverse: #17181c;
+
+  --color-accent-orange: #f6b26b;
+  --color-accent-green: #96d38c;
+  --color-accent-blue: #7fbaf6;
+  --color-accent-yellow: #f3d66b;
+
+  --color-success: #73d087;
+  --color-warning: #f0c96d;
+  --color-danger: #f28b82;
+  --color-info: #7fbaf6;
+
+  --shadow-sm: 0 10px 28px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 18px 42px rgba(0, 0, 0, 0.24);
+  --shadow-lg: 0 28px 72px rgba(0, 0, 0, 0.34);
+
+  --radius-xs: 0.5rem;
+  --radius-sm: 0.875rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 1.75rem;
+  --radius-pill: 999px;
+
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4.5rem;
+
+  --max-shell-width: 80rem;
+  --max-copy-width: 42rem;
+
+  --font-display: var(--font-display, "Space Grotesk", "Segoe UI", sans-serif);
+  --font-body: var(--font-display, "Space Grotesk", "Segoe UI", sans-serif);
+  --font-mono: var(--font-mono, "JetBrains Mono", "Cascadia Mono", monospace);
+
+  --transition-standard: 180ms ease;
+  --focus-ring: 0 0 0 0.2rem rgba(127, 186, 246, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-standard: 0ms linear;
+  }
+}

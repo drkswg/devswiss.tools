@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Next.js output
+.next/
+out/
+
+# Build artifacts
+build/
+dist/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# Environment and logs
+.env*
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+next-env.d.ts
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+.vscode/
+.idea/
+
+# LLM files
+.codex/
+.specify/

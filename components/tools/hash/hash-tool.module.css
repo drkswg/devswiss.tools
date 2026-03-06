@@ -1,0 +1,44 @@
+.layout {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.panel {
+  display: grid;
+  gap: var(--space-xl);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.panelHeader {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.legacyNotice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: fit-content;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(240, 201, 109, 0.28);
+  border-radius: var(--radius-md);
+  background: rgba(240, 201, 109, 0.08);
+  color: var(--color-warning);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+@media (max-width: 720px) {
+  .actions {
+    display: grid;
+  }
+}

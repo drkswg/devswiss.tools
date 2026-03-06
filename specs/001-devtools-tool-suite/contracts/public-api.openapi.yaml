@@ -1,0 +1,169 @@
+openapi: 3.1.0
+info:
+  title: DevTools MVP Contract Surface
+  version: 0.1.0
+  description: >-
+    The MVP exposes no app-managed HTTP API. All initial tool processing runs entirely in the browser.
+    This contract file documents the reserved request and response schema shapes so future expansion can
+    stay aligned without introducing accidental backend scope during MVP delivery.
+servers: []
+paths: {}
+components:
+  schemas:
+    ToolDefinition:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - slug
+        - name
+        - description
+        - routePath
+        - accentToken
+        - supportedActions
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        routePath:
+          type: string
+        accentToken:
+          type: string
+          enum: [orange, green, blue, yellow]
+        supportedActions:
+          type: array
+          items:
+            type: string
+    UUIDProcessRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - mode
+        - version
+      properties:
+        mode:
+          type: string
+          enum: [generate, validate]
+        version:
+          type: string
+          enum: [v1, v3, v4, v5, v7]
+        namespace:
+          type: string
+        name:
+          type: string
+        inputValue:
+          type: string
+    UUIDProcessResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [valid, invalid, error]
+        resultValue:
+          type: string
+        message:
+          type: string
+    Base64ProcessRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - mode
+        - inputValue
+      properties:
+        mode:
+          type: string
+          enum: [encode, decode]
+        inputValue:
+          type: string
+    Base64ProcessResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [valid, invalid, error]
+        resultValue:
+          type: string
+        message:
+          type: string
+    HashGenerateRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - algorithm
+        - inputValue
+      properties:
+        algorithm:
+          type: string
+          enum: [md5, sha1, sha256, sha512]
+        inputValue:
+          type: string
+    HashGenerateResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+        - legacy
+      properties:
+        status:
+          type: string
+          enum: [valid, invalid, error]
+        legacy:
+          type: boolean
+        resultValue:
+          type: string
+        message:
+          type: string
+    CronBuildRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - seconds
+        - minutes
+        - hours
+        - dayOfMonth
+        - month
+        - dayOfWeek
+      properties:
+        seconds:
+          type: string
+        minutes:
+          type: string
+        hours:
+          type: string
+        dayOfMonth:
+          type: string
+        month:
+          type: string
+        dayOfWeek:
+          type: string
+    CronBuildResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [valid, invalid, error]
+        expression:
+          type: string
+        humanSummary:
+          type: string
+        errors:
+          type: array
+          items:
+            type: string
+x-mvp-execution:
+  mode: browser-only
+  note: No HTTP endpoints are defined for MVP delivery.
