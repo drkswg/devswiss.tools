@@ -33,3 +33,4 @@ Thumbs.db
 # LLM files
 .codex/
 .specify/
+AGENTS.md
