@@ -17,10 +17,10 @@ type ToolCatalogProps = {
 };
 
 export function ToolCatalog({
-  description = 'The tool registry plugs into this catalog. Once entries are registered, the same tile pattern renders them automatically.',
+  description = 'Open browser-based utilities for UUIDs, Base64 text, hashes, and cron expressions.',
   eyebrow = 'Tool Catalog',
   id,
-  title = 'Developer workflows, arranged as large utility tiles.',
+  title = 'Common developer utilities, available as direct routes.',
   tools = getAllTools()
 }: Readonly<ToolCatalogProps>) {
   const catalogTools = [...tools].sort((left, right) => {
@@ -38,13 +38,10 @@ export function ToolCatalog({
       <section className={styles.wrapper} id={id}>
         <div className="section-heading">
           <span className="section-eyebrow">{eyebrow}</span>
-          <h2>{title}</h2>
-          <p className="section-copy">{description}</p>
+          {title ? <h2>{title}</h2> : null}
+          {description ? <p className="section-copy">{description}</p> : null}
         </div>
-        <div className={styles.empty}>
-          Registry entries are not populated yet. Phase 3 wires the initial UUID, Base64, Hash, and Cron
-          tools into this shared surface.
-        </div>
+        <div className={styles.empty}>No tools are available yet.</div>
       </section>
     );
   }
@@ -53,8 +50,8 @@ export function ToolCatalog({
     <section className={styles.wrapper} id={id}>
       <div className="section-heading">
         <span className="section-eyebrow">{eyebrow}</span>
-        <h2>{title}</h2>
-        <p className="section-copy">{description}</p>
+        {title ? <h2>{title}</h2> : null}
+        {description ? <p className="section-copy">{description}</p> : null}
       </div>
       <div className={styles.grid}>
         {catalogTools.map((tool) => {

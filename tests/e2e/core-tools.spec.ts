@@ -6,7 +6,7 @@ test.describe('Core tools', () => {
 
     await expect(
       page.getByRole('heading', {
-        name: /DevTools keeps common developer utilities fast, local, and readable/i
+        name: /Your data stays in the browser/i
       })
     ).toBeVisible();
     await expect(page.getByRole('link', { name: /Open UUID Generator & Validator/i })).toBeVisible();

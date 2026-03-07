@@ -9,11 +9,9 @@ const homepageTools = getAllTools();
 const homepageKeywords = Array.from(new Set(homepageTools.flatMap((tool) => tool.keywords)));
 
 const mainStyles = {
+  display: 'grid',
+  gap: 'clamp(2.25rem, 5vw, 3.25rem)',
   paddingBlock: 'clamp(1.5rem, 4vw, 2.5rem) clamp(3rem, 8vw, 5rem)'
-} as const;
-
-const catalogSectionStyles = {
-  marginTop: 'clamp(2.25rem, 5vw, 3.25rem)'
 } as const;
 
 export const metadata: Metadata = {
@@ -34,15 +32,13 @@ export default function HomePage() {
   return (
     <main className="site-shell" style={mainStyles}>
       <Hero />
-      <section style={catalogSectionStyles}>
-        <ToolCatalog
-          description="Open the tool you need directly from the homepage. Each entry follows the same tile pattern so future additions stay predictable."
-          eyebrow="Core Utilities"
-          id="tool-catalog"
-          title="Four core tools, each available as a direct route."
-          tools={homepageTools}
-        />
-      </section>
+      <ToolCatalog
+        description="Generate UUIDs, encode Base64 text, create hashes, and build cron expressions directly in the browser."
+        eyebrow="Core Utilities"
+        id="tool-catalog"
+        title=""
+        tools={homepageTools}
+      />
     </main>
   );
 }

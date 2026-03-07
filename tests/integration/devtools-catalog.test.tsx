@@ -7,7 +7,7 @@ describe('DevTools homepage catalog', () => {
 
     expect(
       getByRole('heading', {
-        name: /DevTools keeps common developer utilities fast, local, and readable/i
+        name: /Your data stays in the browser/i
       })
     ).toBeInTheDocument();
     expect(

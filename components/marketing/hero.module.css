@@ -1,13 +1,16 @@
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(16rem, 0.8fr);
-  gap: clamp(1.5rem, 4vw, 2.5rem);
-  padding: clamp(1.5rem, 4vw, 2.5rem);
+  padding: clamp(1.1rem, 3vw, 1.75rem);
 }
 
 .copy {
   display: grid;
-  gap: var(--space-lg);
+  gap: var(--space-md);
+  max-width: 56rem;
+}
+
+.heading {
+  max-width: none;
 }
 
 .badge {
@@ -25,12 +28,13 @@
 }
 
 .title {
-  max-width: 12ch;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  max-width: none;
+  font-size: clamp(2.2rem, 4.2vw, 3.6rem);
+  white-space: nowrap;
 }
 
 .description {
-  max-width: 42rem;
+  max-width: 38rem;
   color: var(--color-text-secondary);
   font-size: clamp(1rem, 2vw, 1.15rem);
 }
@@ -41,50 +45,9 @@
   gap: 0.85rem;
 }
 
-.highlights {
-  display: grid;
-  gap: var(--space-md);
-}
-
-.highlightCard {
-  display: grid;
-  gap: 0.4rem;
-  padding: 1rem 1.1rem;
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.highlightCard[data-accent='orange'] {
-  border-color: color-mix(in srgb, var(--color-accent-orange) 28%, var(--color-border-subtle));
-}
-
-.highlightCard[data-accent='blue'] {
-  border-color: color-mix(in srgb, var(--color-accent-blue) 28%, var(--color-border-subtle));
-}
-
-.highlightCard[data-accent='green'] {
-  border-color: color-mix(in srgb, var(--color-accent-green) 28%, var(--color-border-subtle));
-}
-
-.highlightLabel {
-  color: var(--color-text-muted);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.highlightCard p {
-  color: var(--color-text-secondary);
-}
-
 @media (max-width: 900px) {
-  .hero {
-    grid-template-columns: 1fr;
-  }
-
   .title {
-    max-width: 14ch;
+    font-size: clamp(2.2rem, 7vw, 3.2rem);
+    white-space: normal;
   }
 }
