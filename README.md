@@ -14,12 +14,11 @@ All MVP tool processing runs in the browser with no app-managed backend API.
 - Node.js 20.9+
 - npm 10+
 
-## Run locally (PowerShell)
+## Run locally
 
-```powershell
-Set-Location 'C:\Users\kodia\IdeaProjects\DevTools'
-& 'C:\Program Files\nodejs\npm.cmd' install
-& 'C:\Program Files\nodejs\npm.cmd' run dev
+```bash
+npm install
+npm run dev
 ```
 
 Open `http://localhost:3000`.
@@ -34,29 +33,24 @@ Open `http://localhost:3000`.
 
 ## Commands
 
-```powershell
-Set-Location 'C:\Users\kodia\IdeaProjects\DevTools'
-& 'C:\Program Files\nodejs\npm.cmd' run lint
-& 'C:\Program Files\nodejs\npm.cmd' run typecheck
-& 'C:\Program Files\nodejs\npm.cmd' run test
-& 'C:\Program Files\nodejs\npm.cmd' run build
-& 'C:\Program Files\nodejs\npm.cmd' run test:e2e
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+npm run test:e2e
 ```
 
 Production-style performance check:
 
-```powershell
-Set-Location 'C:\Users\kodia\IdeaProjects\DevTools'
-$env:CI='1'
-& 'C:\Program Files\nodejs\npm.cmd' run test:e2e -- --project=chromium tests/e2e/performance-budgets.spec.ts
+```bash
+CI=1 npm run test:e2e -- --project=chromium tests/e2e/performance-budgets.spec.ts
 ```
 
 Optional WebKit e2e run:
 
-```powershell
-Set-Location 'C:\Users\kodia\IdeaProjects\DevTools'
-$env:E2E_WEBKIT='1'
-& 'C:\Program Files\nodejs\npm.cmd' run test:e2e
+```bash
+E2E_WEBKIT=1 npm run test:e2e
 ```
 
 ## Add a new tool
@@ -67,4 +61,4 @@ $env:E2E_WEBKIT='1'
 4. Add test coverage in `tests/unit`, `tests/integration`, and `tests/e2e`.
 5. Run all quality gates and confirm catalog consistency.
 
-See the detailed workflow in [quickstart.md](/c/Users/kodia/IdeaProjects/DevTools/specs/001-devtools-tool-suite/quickstart.md).
+See `lib/tools/README.md` for the detailed add-a-tool workflow.
