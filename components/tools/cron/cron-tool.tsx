@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 
-import { buildCronExpression, type CronProcessorResult } from '@/lib/tools/processors/cron';
+import { buildCronExpression, explainCronExpression, type CronProcessorResult } from '@/lib/tools/processors/cron';
 import { copyTextToClipboard } from '@/lib/utils/clipboard';
 import type { FieldErrors } from '@/lib/validation/common';
 import { emptyCronDraft, type CronDraft, type CronFieldCount, type CronFieldKey } from '@/lib/validation/cron';
 
 import { CronBuilder } from './cron-builder';
 import styles from './cron-builder.module.css';
+import { CronExplainer } from './cron-explainer';
 import { CronErrors } from './cron-errors';
 import { CronSummary } from './cron-summary';
 
@@ -23,6 +24,11 @@ const idleResult: CronProcessorResult = {
   message: 'Choose a 5-field or 6-field format, then fill each cron field to generate an expression.'
 };
 
+const idleExplainResult: CronProcessorResult = {
+  state: 'valid',
+  message: 'Paste a 5-field or 6-field cron expression to explain its schedule.'
+};
+
 function removeFieldError(fieldErrors: FieldErrors, field: keyof CronDraft) {
   return Object.fromEntries(
     Object.entries(fieldErrors).filter(([key]) => key !== field)
@@ -33,8 +39,11 @@ export function CronTool() {
   const [draft, setDraft] = useState<CronDraft>(emptyCronDraft);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [result, setResult] = useState<CronProcessorResult>(idleResult);
+  const [expression, setExpression] = useState('');
+  const [explainResult, setExplainResult] = useState<CronProcessorResult>(idleExplainResult);
   const [copyFeedback, setCopyFeedback] = useState<CopyFeedback | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isExplaining, setIsExplaining] = useState(false);
 
   function handleFieldChange(field: CronFieldKey, value: string) {
     setDraft((previous) => ({ ...previous, [field]: value }));
@@ -47,6 +56,16 @@ export function CronTool() {
     setFieldErrors((previous) => removeFieldError(removeFieldError(previous, 'fieldCount'), 'seconds'));
     setResult(idleResult);
     setCopyFeedback(null);
+  }
+
+  function handleExpressionChange(value: string) {
+    setExpression(value);
+    setExplainResult((previous) => ({
+      ...previous,
+      fieldErrors: previous.fieldErrors
+        ? Object.fromEntries(Object.entries(previous.fieldErrors).filter(([key]) => key !== 'expression'))
+        : previous.fieldErrors
+    }));
   }
 
   async function handleCopy() {
@@ -85,8 +104,27 @@ export function CronTool() {
     }
   }
 
+  function handleExplainSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsExplaining(true);
+
+    try {
+      const nextResult = explainCronExpression(expression);
+      setExplainResult(nextResult);
+    } finally {
+      setIsExplaining(false);
+    }
+  }
+
   return (
     <div className={styles.layout}>
+      <CronExplainer
+        expression={expression}
+        isSubmitting={isExplaining}
+        onExpressionChange={handleExpressionChange}
+        onSubmit={handleExplainSubmit}
+        result={explainResult}
+      />
       <CronBuilder
         draft={draft}
         fieldErrors={fieldErrors}

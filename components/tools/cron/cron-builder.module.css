@@ -41,6 +41,11 @@
   gap: var(--space-lg);
 }
 
+.expressionInput {
+  min-height: 7rem;
+  resize: vertical;
+}
+
 .summaryPanel {
   display: grid;
   gap: var(--space-sm);

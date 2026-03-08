@@ -1,4 +1,4 @@
-import { buildCronExpression } from '@/lib/tools/processors/cron';
+import { buildCronExpression, explainCronExpression } from '@/lib/tools/processors/cron';
 
 describe('Cron processor', () => {
   it('builds a six-field cron expression with a readable summary', () => {
@@ -125,5 +125,42 @@ describe('Cron processor', () => {
 
     expect(result.state).toBe('invalid');
     expect(result.errors?.some((value) => value.includes('Choose either day of month or day of week'))).toBe(true);
+  });
+
+  it('explains a valid five-field cron expression', () => {
+    const result = explainCronExpression('  */15   *  * * *  ');
+
+    expect(result.state).toBe('valid');
+    expect(result.expression).toBe('*/15 * * * *');
+    expect(result.humanSummary).toContain('Every 15 minutes');
+  });
+
+  it('explains a valid six-field cron expression', () => {
+    const result = explainCronExpression('0 0 0 * * *');
+
+    expect(result.state).toBe('valid');
+    expect(result.expression).toBe('0 0 0 * * *');
+    expect(result.humanSummary).toBe('Every day at 12:00:00 AM');
+  });
+
+  it('returns a field error when the raw expression is empty', () => {
+    const result = explainCronExpression('   ');
+
+    expect(result.state).toBe('invalid');
+    expect(result.fieldErrors?.expression?.[0]).toBe('Cron expression is required.');
+  });
+
+  it('rejects a raw expression with an unsupported field count', () => {
+    const result = explainCronExpression('* * * *');
+
+    expect(result.state).toBe('invalid');
+    expect(result.fieldErrors?.expression?.[0]).toBe('Cron expression must use 5 fields or 6 fields.');
+  });
+
+  it('returns an error state when a five-field or six-field expression cannot be interpreted', () => {
+    const result = explainCronExpression('99 * * * *');
+
+    expect(result.state).toBe('error');
+    expect(result.message).toContain('could not be interpreted');
   });
 });

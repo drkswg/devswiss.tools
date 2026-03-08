@@ -2,6 +2,7 @@ import cronstrue from 'cronstrue';
 
 import type { FieldErrors, ValidationState } from '@/lib/validation/common';
 import { cronDraftSchema, getCronFieldErrors, type CronDraft } from '@/lib/validation/cron';
+import { normalizePlainText } from '@/lib/utils/text';
 
 export type CronProcessorResult = {
   errors?: string[];
@@ -46,6 +47,38 @@ function buildExpression(input: CronDraft) {
   return [input.seconds, ...baseFields].join(' ');
 }
 
+function parseExpression(expression: string): CronDraft | null {
+  const segments = expression.trim().split(/\s+/);
+
+  if (segments.length === 5) {
+    const [minutes, hours, dayOfMonth, month, dayOfWeek] = segments;
+    return {
+      fieldCount: '5',
+      seconds: '',
+      minutes,
+      hours,
+      dayOfMonth,
+      month,
+      dayOfWeek
+    };
+  }
+
+  if (segments.length === 6) {
+    const [seconds, minutes, hours, dayOfMonth, month, dayOfWeek] = segments;
+    return {
+      fieldCount: '6',
+      seconds,
+      minutes,
+      hours,
+      dayOfMonth,
+      month,
+      dayOfWeek
+    };
+  }
+
+  return null;
+}
+
 function buildReadableSummary(input: CronDraft, fallbackSummary: string) {
   const { dayOfMonth, dayOfWeek, fieldCount, hours, minutes, month, seconds } = input;
   const isDaily = dayOfMonth === '*' && dayOfWeek === '*' && month === '*';
@@ -85,6 +118,20 @@ function buildReadableSummary(input: CronDraft, fallbackSummary: string) {
   return fallbackSummary.replace(/^Every second, every minute, /, 'Every second during the ');
 }
 
+function summarizeCronExpression(expression: string, draft?: CronDraft) {
+  const rawSummary = cronstrue.toString(expression, {
+    use24HourTimeFormat: true,
+    verbose: true
+  });
+
+  const resolvedDraft = draft ?? parseExpression(expression);
+  if (!resolvedDraft) {
+    return rawSummary;
+  }
+
+  return buildReadableSummary(resolvedDraft, rawSummary);
+}
+
 export function buildCronExpression(input: CronDraft): CronProcessorResult {
   const parsed = cronDraftSchema.safeParse(input);
 
@@ -106,11 +153,7 @@ export function buildCronExpression(input: CronDraft): CronProcessorResult {
   const expression = buildExpression(parsed.data);
 
   try {
-    const rawSummary = cronstrue.toString(expression, {
-      use24HourTimeFormat: true,
-      verbose: true
-    });
-    const humanSummary = buildReadableSummary(parsed.data, rawSummary);
+    const humanSummary = summarizeCronExpression(expression, parsed.data);
 
     return {
       state: 'valid',
@@ -124,6 +167,52 @@ export function buildCronExpression(input: CronDraft): CronProcessorResult {
       expression,
       message:
         'The cron expression could not be summarized. Adjust the selected fields and try again.'
+    };
+  }
+}
+
+export function explainCronExpression(input: string): CronProcessorResult {
+  const expression = normalizePlainText(input).split(/\s+/).filter(Boolean).join(' ');
+
+  if (expression.length === 0) {
+    return {
+      state: 'invalid',
+      message: 'Enter a cron expression to explain.',
+      fieldErrors: {
+        expression: ['Cron expression is required.']
+      },
+      errors: ['Cron expression is required.']
+    };
+  }
+
+  const segments = expression.split(' ');
+  if (segments.length !== 5 && segments.length !== 6) {
+    return {
+      state: 'invalid',
+      expression,
+      message: 'Enter a 5-field or 6-field cron expression to explain.',
+      fieldErrors: {
+        expression: ['Cron expression must use 5 fields or 6 fields.']
+      },
+      errors: ['Cron expression must use 5 fields or 6 fields.']
+    };
+  }
+
+  try {
+    const humanSummary = summarizeCronExpression(expression);
+
+    return {
+      state: 'valid',
+      expression,
+      humanSummary,
+      message: 'Cron expression explained.'
+    };
+  } catch {
+    return {
+      state: 'error',
+      expression,
+      message: 'The cron expression could not be interpreted. Check the field values and try again.',
+      errors: ['The cron expression could not be interpreted. Check the field values and try again.']
     };
   }
 }

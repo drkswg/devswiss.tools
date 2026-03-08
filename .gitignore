@@ -31,8 +31,5 @@ Thumbs.db
 .idea/
 
 # LLM files
-.codex/
-.specify/
-specs/
 LOCAL.md
 

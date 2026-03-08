@@ -1,6 +1,21 @@
 import { expect, test } from '@/tests/e2e/fixtures';
 
 test.describe('Cron tool', () => {
+  test('shows builder and explainer workflows together and explains a pasted expression', async ({ page, runAxe }) => {
+    await page.goto('/tools/cron');
+
+    await expect(page.getByRole('heading', { name: /Explain a 5-field or 6-field cron expression/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Build a 5-field or 6-field cron expression/i })).toBeVisible();
+
+    await page.getByRole('textbox', { name: /Cron expression/i }).fill('0 */15 * * * *');
+    await page.getByRole('button', { name: /Explain cron expression/i }).click();
+
+    await expect(page.getByText(/Cron expression explained/i)).toBeVisible();
+    await expect(page.getByRole('region', { name: /Normalized cron expression/i }).getByText('0 */15 * * * *')).toBeVisible();
+    await expect(page.locator('section[aria-label="Cron explanation summary"]')).toContainText(/Every 15 minutes/i);
+    await runAxe('main');
+  });
+
   test('builds a six-field expression, readable summary, and copy feedback', async ({ page, runAxe }) => {
     await page.goto('/tools/cron');
 
@@ -14,7 +29,7 @@ test.describe('Cron tool', () => {
     await page.getByRole('button', { name: /Generate cron expression/i }).click();
 
     await expect(page.getByText(/Cron expression generated/i)).toBeVisible();
-    await expect(page.getByText('0 */15 * * * *')).toBeVisible();
+    await expect(page.getByRole('region', { name: /^Cron expression$/i }).getByText('0 */15 * * * *')).toBeVisible();
     await expect(page.locator('section[aria-label="Readable schedule summary"]')).toContainText(
       /Every 15 minutes/i
     );
@@ -39,7 +54,7 @@ test.describe('Cron tool', () => {
     await page.getByRole('button', { name: /Generate cron expression/i }).click();
 
     await expect(page.getByText(/Cron expression generated/i)).toBeVisible();
-    await expect(page.getByText('*/15 * * * *')).toBeVisible();
+    await expect(page.getByRole('region', { name: /^Cron expression$/i }).getByText('*/15 * * * *')).toBeVisible();
     await expect(page.locator('section[aria-label="Readable schedule summary"]')).toContainText(
       /Every 15 minutes/i
     );
