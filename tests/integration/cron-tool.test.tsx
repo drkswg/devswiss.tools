@@ -20,6 +20,22 @@ describe('Cron tool flow', () => {
     expect(getAllByText(/Every 15 minutes/i).length).toBeGreaterThan(0);
   });
 
+  it('clarifies that wildcard seconds and minutes keep a fixed hour running continuously', async () => {
+    const { user, getByLabelText, getByRole, getByText } = renderIntegration(<CronTool />);
+
+    await user.selectOptions(getByLabelText(/^Seconds/i), '*');
+    await user.selectOptions(getByLabelText(/^Minutes/i), '*');
+    await user.selectOptions(getByLabelText(/^Hours/i), '12');
+    await user.selectOptions(getByLabelText(/^Day of month/i), '*');
+    await user.selectOptions(getByLabelText(/^Month/i), '*');
+    await user.selectOptions(getByLabelText(/^Day of week/i), '*');
+
+    await user.click(getByRole('button', { name: /Generate cron expression/i }));
+
+    expect(getByText('* * 12 * * *')).toBeInTheDocument();
+    expect(getByText('Every second during the 12:00 PM hour every day')).toBeInTheDocument();
+  });
+
   it('shows actionable guidance for conflicting day selectors', async () => {
     const { user, getAllByText, getByLabelText, getByRole } = renderIntegration(<CronTool />);
 

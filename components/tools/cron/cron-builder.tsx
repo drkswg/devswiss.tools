@@ -45,7 +45,7 @@ export function CronBuilder({
         <div className={styles.grid}>
           <FormField
             error={fieldErrors.seconds?.[0]}
-            hint="Set the seconds field (0-59)."
+            hint='Set the seconds field (0-59). Use "*" for any second.'
             htmlFor="cron-seconds"
             label="Seconds"
             required
@@ -67,7 +67,7 @@ export function CronBuilder({
 
           <FormField
             error={fieldErrors.minutes?.[0]}
-            hint="Set the minutes field (0-59)."
+            hint='Set the minutes field (0-59). Use "*" for any minute.'
             htmlFor="cron-minutes"
             label="Minutes"
             required
@@ -89,7 +89,7 @@ export function CronBuilder({
 
           <FormField
             error={fieldErrors.hours?.[0]}
-            hint="Set the hours field (0-23)."
+            hint='Set the hours field (0-23). A fixed hour plus "*" minutes means the whole hour, not a single run.'
             htmlFor="cron-hours"
             label="Hours"
             required
@@ -133,7 +133,7 @@ export function CronBuilder({
 
           <FormField
             error={fieldErrors.month?.[0]}
-            hint="Set the month field (1-12)."
+            hint='Set the month field (1-12). Use "*" for any month.'
             htmlFor="cron-month"
             label="Month"
             required

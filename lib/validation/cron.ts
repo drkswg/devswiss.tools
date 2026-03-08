@@ -38,7 +38,7 @@ export const emptyCronDraft: CronDraft = {
 
 export const cronFieldOptions: Record<CronFieldKey, readonly CronOption[]> = {
   seconds: [
-    { value: '*', label: 'Every second (*)' },
+    { value: '*', label: 'Any second (*)' },
     { value: '0', label: 'Second 0' },
     { value: '*/5', label: 'Every 5 seconds (*/5)' },
     { value: '*/10', label: 'Every 10 seconds (*/10)' },
@@ -46,7 +46,7 @@ export const cronFieldOptions: Record<CronFieldKey, readonly CronOption[]> = {
     { value: '*/30', label: 'Every 30 seconds (*/30)' }
   ],
   minutes: [
-    { value: '*', label: 'Every minute (*)' },
+    { value: '*', label: 'Any minute (*)' },
     { value: '0', label: 'Minute 0' },
     { value: '*/5', label: 'Every 5 minutes (*/5)' },
     { value: '*/10', label: 'Every 10 minutes (*/10)' },
@@ -54,7 +54,7 @@ export const cronFieldOptions: Record<CronFieldKey, readonly CronOption[]> = {
     { value: '*/30', label: 'Every 30 minutes (*/30)' }
   ],
   hours: [
-    { value: '*', label: 'Every hour (*)' },
+    { value: '*', label: 'Any hour (*)' },
     { value: '0', label: '00:00 hour' },
     { value: '9', label: '09:00 hour' },
     { value: '12', label: '12:00 hour' },
@@ -63,14 +63,14 @@ export const cronFieldOptions: Record<CronFieldKey, readonly CronOption[]> = {
     { value: '9-17', label: 'Business hours range (9-17)' }
   ],
   dayOfMonth: [
-    { value: '*', label: 'Every day of month (*)' },
+    { value: '*', label: 'Any day of month (*)' },
     { value: '1', label: 'Day 1' },
     { value: '15', label: 'Day 15' },
     { value: '28', label: 'Day 28' },
     { value: '1-5', label: 'Days 1-5' }
   ],
   month: [
-    { value: '*', label: 'Every month (*)' },
+    { value: '*', label: 'Any month (*)' },
     { value: '1', label: 'January (1)' },
     { value: '3', label: 'March (3)' },
     { value: '6', label: 'June (6)' },

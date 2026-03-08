@@ -18,6 +18,43 @@ function buildErrorList(fieldErrors: FieldErrors, fallbackIssues: string[]) {
   return Array.from(new Set(candidateIssues));
 }
 
+function isNumericSegment(value: string) {
+  return /^\d+$/.test(value);
+}
+
+function formatClock(hours: string, minutes = '0', seconds?: string) {
+  const hour = Number.parseInt(hours, 10);
+  const minute = Number.parseInt(minutes, 10);
+  const suffix = hour >= 12 ? 'PM' : 'AM';
+  const normalizedHour = hour % 12 || 12;
+  const base = `${normalizedHour}:${String(minute).padStart(2, '0')}`;
+
+  if (seconds === undefined) {
+    return `${base} ${suffix}`;
+  }
+
+  return `${base}:${String(Number.parseInt(seconds, 10)).padStart(2, '0')} ${suffix}`;
+}
+
+function buildReadableSummary(input: CronDraft, fallbackSummary: string) {
+  const { dayOfMonth, dayOfWeek, hours, minutes, month, seconds } = input;
+  const isDaily = dayOfMonth === '*' && dayOfWeek === '*' && month === '*';
+
+  if (isDaily && isNumericSegment(hours) && isNumericSegment(minutes) && isNumericSegment(seconds)) {
+    return `Every day at ${formatClock(hours, minutes, seconds)}`;
+  }
+
+  if (isDaily && isNumericSegment(hours) && minutes === '*' && seconds === '*') {
+    return `Every second during the ${formatClock(hours)} hour every day`;
+  }
+
+  if (isDaily && isNumericSegment(hours) && isNumericSegment(minutes) && seconds === '*') {
+    return `Every second at ${formatClock(hours, minutes)} every day`;
+  }
+
+  return fallbackSummary.replace(/^Every second, every minute, /, 'Every second during the ');
+}
+
 export function buildCronExpression(input: CronDraft): CronProcessorResult {
   const parsed = cronDraftSchema.safeParse(input);
 
@@ -46,10 +83,11 @@ export function buildCronExpression(input: CronDraft): CronProcessorResult {
   ].join(' ');
 
   try {
-    const humanSummary = cronstrue.toString(expression, {
+    const rawSummary = cronstrue.toString(expression, {
       use24HourTimeFormat: true,
       verbose: true
     });
+    const humanSummary = buildReadableSummary(parsed.data, rawSummary);
 
     return {
       state: 'valid',

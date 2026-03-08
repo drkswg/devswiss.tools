@@ -25,7 +25,7 @@ export default function CronPage() {
         </>
       }
       description={tool.description}
-      helperText='Generate six-field cron expressions with seconds. Keep either "day of month" or "day of week" as "*" to avoid conflicts.'
+      helperText='Generate six-field cron expressions with seconds. A fixed hour with "*" minutes and seconds means the whole hour, while a single daily run needs explicit seconds and minutes such as "0 0 0 * * *".'
       title={tool.name}
     >
       <CronTool />

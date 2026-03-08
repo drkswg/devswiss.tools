@@ -24,6 +24,23 @@ test.describe('Cron tool', () => {
     await runAxe('main');
   });
 
+  test('clarifies that wildcard seconds and minutes keep the selected hour active', async ({ page }) => {
+    await page.goto('/tools/cron');
+
+    await page.getByLabel(/^Seconds/i).selectOption('*');
+    await page.getByLabel(/^Minutes/i).selectOption('*');
+    await page.getByLabel(/^Hours/i).selectOption('12');
+    await page.getByLabel(/^Day of month/i).selectOption('*');
+    await page.getByLabel(/^Month/i).selectOption('*');
+    await page.getByLabel(/^Day of week/i).selectOption('*');
+
+    await page.getByRole('button', { name: /Generate cron expression/i }).click();
+
+    await expect(page.locator('section[aria-label="Readable schedule summary"]')).toContainText(
+      'Every second during the 12:00 PM hour every day'
+    );
+  });
+
   test('surfaces conflict errors for day-of-month and day-of-week', async ({ page, runAxe }) => {
     await page.goto('/tools/cron');
 
