@@ -1,5 +1,6 @@
 .field {
   display: grid;
+  min-width: 0;
   gap: var(--space-sm);
 }
 
@@ -36,5 +37,6 @@
 
 .content {
   display: grid;
+  min-width: 0;
   gap: var(--space-sm);
 }
