@@ -36,19 +36,49 @@ function formatClock(hours: string, minutes = '0', seconds?: string) {
   return `${base}:${String(Number.parseInt(seconds, 10)).padStart(2, '0')} ${suffix}`;
 }
 
+function buildExpression(input: CronDraft) {
+  const baseFields = [input.minutes, input.hours, input.dayOfMonth, input.month, input.dayOfWeek];
+
+  if (input.fieldCount === '5') {
+    return baseFields.join(' ');
+  }
+
+  return [input.seconds, ...baseFields].join(' ');
+}
+
 function buildReadableSummary(input: CronDraft, fallbackSummary: string) {
-  const { dayOfMonth, dayOfWeek, hours, minutes, month, seconds } = input;
+  const { dayOfMonth, dayOfWeek, fieldCount, hours, minutes, month, seconds } = input;
   const isDaily = dayOfMonth === '*' && dayOfWeek === '*' && month === '*';
 
-  if (isDaily && isNumericSegment(hours) && isNumericSegment(minutes) && isNumericSegment(seconds)) {
+  if (fieldCount === '5' && isDaily && isNumericSegment(hours) && isNumericSegment(minutes)) {
+    return `Every day at ${formatClock(hours, minutes)}`;
+  }
+
+  if (fieldCount === '5' && isDaily && isNumericSegment(hours) && minutes === '*') {
+    return `Every minute during the ${formatClock(hours)} hour every day`;
+  }
+
+  if (
+    fieldCount === '6' &&
+    isDaily &&
+    isNumericSegment(hours) &&
+    isNumericSegment(minutes) &&
+    isNumericSegment(seconds)
+  ) {
     return `Every day at ${formatClock(hours, minutes, seconds)}`;
   }
 
-  if (isDaily && isNumericSegment(hours) && minutes === '*' && seconds === '*') {
+  if (fieldCount === '6' && isDaily && isNumericSegment(hours) && minutes === '*' && seconds === '*') {
     return `Every second during the ${formatClock(hours)} hour every day`;
   }
 
-  if (isDaily && isNumericSegment(hours) && isNumericSegment(minutes) && seconds === '*') {
+  if (
+    fieldCount === '6' &&
+    isDaily &&
+    isNumericSegment(hours) &&
+    isNumericSegment(minutes) &&
+    seconds === '*'
+  ) {
     return `Every second at ${formatClock(hours, minutes)} every day`;
   }
 
@@ -73,14 +103,7 @@ export function buildCronExpression(input: CronDraft): CronProcessorResult {
     };
   }
 
-  const expression = [
-    parsed.data.seconds,
-    parsed.data.minutes,
-    parsed.data.hours,
-    parsed.data.dayOfMonth,
-    parsed.data.month,
-    parsed.data.dayOfWeek
-  ].join(' ');
+  const expression = buildExpression(parsed.data);
 
   try {
     const rawSummary = cronstrue.toString(expression, {

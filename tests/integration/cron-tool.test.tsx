@@ -3,7 +3,7 @@ import { CronTool } from '@/components/tools/cron/cron-tool';
 import { renderIntegration } from '@/tests/integration/test-utils';
 
 describe('Cron tool flow', () => {
-  it('builds a cron expression and readable summary from guided choices', async () => {
+  it('builds a six-field cron expression and readable summary from guided choices', async () => {
     const { user, getAllByText, getByLabelText, getByRole, getByText } = renderIntegration(<CronTool />);
 
     await user.selectOptions(getByLabelText(/^Seconds/i), '0');
@@ -17,6 +17,28 @@ describe('Cron tool flow', () => {
 
     expect(getByText(/Cron expression generated/i)).toBeInTheDocument();
     expect(getByText('0 */15 * * * *')).toBeInTheDocument();
+    expect(getAllByText(/Every 15 minutes/i).length).toBeGreaterThan(0);
+  });
+
+  it('builds a five-field cron expression when seconds are disabled', async () => {
+    const { user, queryByLabelText, getAllByText, getByLabelText, getByRole, getByText } = renderIntegration(
+      <CronTool />
+    );
+
+    await user.selectOptions(getByLabelText(/^Expression format/i), '5');
+
+    expect(queryByLabelText(/^Seconds/i)).not.toBeInTheDocument();
+
+    await user.selectOptions(getByLabelText(/^Minutes/i), '*/15');
+    await user.selectOptions(getByLabelText(/^Hours/i), '*');
+    await user.selectOptions(getByLabelText(/^Day of month/i), '*');
+    await user.selectOptions(getByLabelText(/^Month/i), '*');
+    await user.selectOptions(getByLabelText(/^Day of week/i), '*');
+
+    await user.click(getByRole('button', { name: /Generate cron expression/i }));
+
+    expect(getByText(/Cron expression generated/i)).toBeInTheDocument();
+    expect(getByText('*/15 * * * *')).toBeInTheDocument();
     expect(getAllByText(/Every 15 minutes/i).length).toBeGreaterThan(0);
   });
 

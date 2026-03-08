@@ -5,7 +5,7 @@ import type { FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { FormField } from '@/components/ui/form-field';
 import type { FieldErrors } from '@/lib/validation/common';
-import { cronFieldOptions, type CronDraft, type CronFieldKey } from '@/lib/validation/cron';
+import { cronFieldOptions, type CronDraft, type CronFieldCount, type CronFieldKey } from '@/lib/validation/cron';
 
 import styles from './cron-builder.module.css';
 
@@ -13,6 +13,7 @@ type CronBuilderProps = {
   draft: CronDraft;
   fieldErrors: FieldErrors;
   isSubmitting: boolean;
+  onFieldCountChange: (fieldCount: CronFieldCount) => void;
   onFieldChange: (field: CronFieldKey, value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 };
@@ -25,49 +26,73 @@ export function CronBuilder({
   draft,
   fieldErrors,
   isSubmitting,
+  onFieldCountChange,
   onFieldChange,
   onSubmit
 }: Readonly<CronBuilderProps>) {
+  const isSixField = draft.fieldCount === '6';
+
   return (
     <section className={`surface-card ${styles.panel}`}>
       <div className={styles.panelHeader}>
         <div className="section-heading">
           <span className="section-eyebrow">Cron builder</span>
-          <h2>Build a six-field cron expression</h2>
+          <h2>Build a 5-field or 6-field cron expression</h2>
           <p className="section-copy">
-            Choose each cron field from guided options. DevTools validates incomplete or conflicting choices
-            before generating an expression.
+            Choose whether to include seconds, then fill each cron field from guided options. DevTools
+            validates incomplete or conflicting choices before generating an expression.
           </p>
         </div>
       </div>
 
       <form className={styles.form} onSubmit={onSubmit}>
-        <div className={styles.grid}>
+        <div className={styles.modeControl}>
           <FormField
-            error={fieldErrors.seconds?.[0]}
-            hint='Set the seconds field (0-59). Use "*" for any second.'
-            htmlFor="cron-seconds"
-            label="Seconds"
+            hint="Choose 5 fields for standard cron output or 6 fields when your scheduler includes seconds."
+            htmlFor="cron-field-count"
+            label="Expression format"
             required
           >
             <select
-              aria-describedby={describedBy('cron-seconds', fieldErrors.seconds?.[0])}
-              id="cron-seconds"
-              onChange={(event) => onFieldChange('seconds', event.target.value)}
-              value={draft.seconds}
+              aria-describedby={describedBy('cron-field-count')}
+              id="cron-field-count"
+              onChange={(event) => onFieldCountChange(event.target.value as CronFieldCount)}
+              value={draft.fieldCount}
             >
-              <option value="">Select seconds</option>
-              {cronFieldOptions.seconds.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
+              <option value="5">5 fields (minute hour day-of-month month day-of-week)</option>
+              <option value="6">6 fields (seconds minute hour day-of-month month day-of-week)</option>
             </select>
           </FormField>
+        </div>
+
+        <div className={styles.grid}>
+          {isSixField ? (
+            <FormField
+              error={fieldErrors.seconds?.[0]}
+              hint='Set the seconds field (0-59). Use "*" for any second.'
+              htmlFor="cron-seconds"
+              label="Seconds"
+              required
+            >
+              <select
+                aria-describedby={describedBy('cron-seconds', fieldErrors.seconds?.[0])}
+                id="cron-seconds"
+                onChange={(event) => onFieldChange('seconds', event.target.value)}
+                value={draft.seconds}
+              >
+                <option value="">Select seconds</option>
+                {cronFieldOptions.seconds.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </FormField>
+          ) : null}
 
           <FormField
             error={fieldErrors.minutes?.[0]}
-            hint='Set the minutes field (0-59). Use "*" for any minute.'
+            hint={`Set the minutes field (0-59). Use "*" for any minute${isSixField ? '' : ' in a 5-field expression'}.`}
             htmlFor="cron-minutes"
             label="Minutes"
             required
@@ -89,7 +114,7 @@ export function CronBuilder({
 
           <FormField
             error={fieldErrors.hours?.[0]}
-            hint='Set the hours field (0-23). A fixed hour plus "*" minutes means the whole hour, not a single run.'
+            hint={`Set the hours field (0-23). A fixed hour plus "*" minutes${isSixField ? ' and "*" seconds' : ''} means the whole hour, not a single run.`}
             htmlFor="cron-hours"
             label="Hours"
             required

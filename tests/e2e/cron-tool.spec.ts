@@ -24,6 +24,28 @@ test.describe('Cron tool', () => {
     await runAxe('main');
   });
 
+  test('builds a five-field expression when seconds are omitted', async ({ page, runAxe }) => {
+    await page.goto('/tools/cron');
+
+    await page.getByLabel(/^Expression format/i).selectOption('5');
+    await expect(page.getByLabel(/^Seconds/i)).toHaveCount(0);
+
+    await page.getByLabel(/^Minutes/i).selectOption('*/15');
+    await page.getByLabel(/^Hours/i).selectOption('*');
+    await page.getByLabel(/^Day of month/i).selectOption('*');
+    await page.getByLabel(/^Month/i).selectOption('*');
+    await page.getByLabel(/^Day of week/i).selectOption('*');
+
+    await page.getByRole('button', { name: /Generate cron expression/i }).click();
+
+    await expect(page.getByText(/Cron expression generated/i)).toBeVisible();
+    await expect(page.getByText('*/15 * * * *')).toBeVisible();
+    await expect(page.locator('section[aria-label="Readable schedule summary"]')).toContainText(
+      /Every 15 minutes/i
+    );
+    await runAxe('main');
+  });
+
   test('clarifies that wildcard seconds and minutes keep the selected hour active', async ({ page }) => {
     await page.goto('/tools/cron');
 

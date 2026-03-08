@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { buildCronExpression, type CronProcessorResult } from '@/lib/tools/processors/cron';
 import { copyTextToClipboard } from '@/lib/utils/clipboard';
 import type { FieldErrors } from '@/lib/validation/common';
-import { emptyCronDraft, type CronDraft, type CronFieldKey } from '@/lib/validation/cron';
+import { emptyCronDraft, type CronDraft, type CronFieldCount, type CronFieldKey } from '@/lib/validation/cron';
 
 import { CronBuilder } from './cron-builder';
 import styles from './cron-builder.module.css';
@@ -20,10 +20,10 @@ type CopyFeedback = {
 
 const idleResult: CronProcessorResult = {
   state: 'valid',
-  message: 'Choose each cron field to generate an expression.'
+  message: 'Choose a 5-field or 6-field format, then fill each cron field to generate an expression.'
 };
 
-function removeFieldError(fieldErrors: FieldErrors, field: CronFieldKey) {
+function removeFieldError(fieldErrors: FieldErrors, field: keyof CronDraft) {
   return Object.fromEntries(
     Object.entries(fieldErrors).filter(([key]) => key !== field)
   );
@@ -39,6 +39,13 @@ export function CronTool() {
   function handleFieldChange(field: CronFieldKey, value: string) {
     setDraft((previous) => ({ ...previous, [field]: value }));
     setFieldErrors((previous) => removeFieldError(previous, field));
+    setCopyFeedback(null);
+  }
+
+  function handleFieldCountChange(fieldCount: CronFieldCount) {
+    setDraft((previous) => ({ ...previous, fieldCount }));
+    setFieldErrors((previous) => removeFieldError(removeFieldError(previous, 'fieldCount'), 'seconds'));
+    setResult(idleResult);
     setCopyFeedback(null);
   }
 
@@ -84,6 +91,7 @@ export function CronTool() {
         draft={draft}
         fieldErrors={fieldErrors}
         isSubmitting={isSubmitting}
+        onFieldCountChange={handleFieldCountChange}
         onFieldChange={handleFieldChange}
         onSubmit={handleSubmit}
       />

@@ -33,117 +33,117 @@ export function createToolRegistry(definitions: ToolDefinition[]) {
 
 export const toolRegistry = Object.freeze(
   createToolRegistry([
-  createToolDefinition({
-    id: 'uuid',
-    slug: 'uuid',
-    name: 'UUID Generator & Validator',
-    description: 'Generate UUID versions 1, 3, 4, 5, and 7 or validate a pasted UUID instantly.',
-    iconKey: 'fingerprint',
-    accentToken: 'orange',
-    order: 0,
-    category: 'Developer Utilities',
-    supportsCopy: true,
-    status: 'active',
-    keywords: ['uuid', 'guid', 'validator'],
-    supportedActions: [
-      {
-        toolId: 'uuid',
-        actionId: 'generate',
-        label: 'Generate UUID',
-        mode: 'generate',
-        inputFields: ['version', 'namespace', 'name'],
-        resultKind: 'text',
-        helperText: 'Versions 3 and 5 require namespace and name inputs.'
-      },
-      {
-        toolId: 'uuid',
-        actionId: 'validate',
-        label: 'Validate UUID',
-        mode: 'validate',
-        inputFields: ['value'],
-        resultKind: 'status',
-        helperText: 'Validation accepts versions 1, 3, 4, 5, and 7.'
-      }
-    ]
-  }),
-  createToolDefinition({
-    id: 'base64',
-    slug: 'base64',
-    name: 'Base64 Encoder & Decoder',
-    description: 'Encode plain text or decode Base64 safely, including Unicode content.',
-    iconKey: 'binary',
-    accentToken: 'blue',
-    order: 1,
-    category: 'Developer Utilities',
-    supportsCopy: true,
-    status: 'active',
-    keywords: ['base64', 'encode', 'decode'],
-    supportedActions: [
-      {
-        toolId: 'base64',
-        actionId: 'encode',
-        label: 'Encode',
-        mode: 'encode',
-        inputFields: ['inputValue'],
-        resultKind: 'text'
-      },
-      {
-        toolId: 'base64',
-        actionId: 'decode',
-        label: 'Decode',
-        mode: 'decode',
-        inputFields: ['inputValue'],
-        resultKind: 'text'
-      }
-    ]
-  }),
-  createToolDefinition({
-    id: 'hash',
-    slug: 'hash',
-    name: 'Hash Generator',
-    description: 'Create MD5, SHA-1, SHA-256, and SHA-512 hashes entirely in the browser.',
-    iconKey: 'hash',
-    accentToken: 'green',
-    order: 2,
-    category: 'Developer Utilities',
-    supportsCopy: true,
-    status: 'active',
-    keywords: ['hash', 'sha256', 'sha512', 'md5'],
-    supportedActions: [
-      {
-        toolId: 'hash',
-        actionId: 'generate-hash',
-        label: 'Generate hash',
-        mode: 'generate',
-        inputFields: ['algorithm', 'inputValue'],
-        resultKind: 'text',
-        helperText: 'MD5 and SHA-1 stay available for legacy compatibility.'
-      }
-    ]
-  }),
-  createToolDefinition({
-    id: 'cron',
-    slug: 'cron',
-    name: 'Cron Expression Generator',
-    description: 'Build six-field cron expressions with seconds and read them as plain language.',
-    iconKey: 'clock',
-    accentToken: 'yellow',
-    order: 3,
-    category: 'Scheduling',
-    supportsCopy: true,
-    status: 'active',
-    keywords: ['cron', 'schedule', 'expression'],
-    supportedActions: [
-      {
-        toolId: 'cron',
-        actionId: 'build-cron',
-        label: 'Build cron expression',
-        mode: 'build',
-        inputFields: ['seconds', 'minutes', 'hours', 'dayOfMonth', 'month', 'dayOfWeek'],
-        resultKind: 'expression'
-      }
-    ]
-  })
+    createToolDefinition({
+      id: 'uuid',
+      slug: 'uuid',
+      name: 'UUID Generator & Validator',
+      description: 'Generate UUID versions 1, 3, 4, 5, and 7 or validate a pasted UUID instantly.',
+      iconKey: 'fingerprint',
+      accentToken: 'orange',
+      order: 0,
+      category: 'Developer Utilities',
+      supportsCopy: true,
+      status: 'active',
+      keywords: ['uuid', 'guid', 'validator'],
+      supportedActions: [
+        {
+          toolId: 'uuid',
+          actionId: 'generate',
+          label: 'Generate UUID',
+          mode: 'generate',
+          inputFields: ['version', 'namespace', 'name'],
+          resultKind: 'text',
+          helperText: 'Versions 3 and 5 require namespace and name inputs.'
+        },
+        {
+          toolId: 'uuid',
+          actionId: 'validate',
+          label: 'Validate UUID',
+          mode: 'validate',
+          inputFields: ['value'],
+          resultKind: 'status',
+          helperText: 'Validation accepts versions 1, 3, 4, 5, and 7.'
+        }
+      ]
+    }),
+    createToolDefinition({
+      id: 'base64',
+      slug: 'base64',
+      name: 'Base64 Encoder & Decoder',
+      description: 'Encode plain text or decode Base64 safely, including Unicode content.',
+      iconKey: 'binary',
+      accentToken: 'blue',
+      order: 1,
+      category: 'Developer Utilities',
+      supportsCopy: true,
+      status: 'active',
+      keywords: ['base64', 'encode', 'decode'],
+      supportedActions: [
+        {
+          toolId: 'base64',
+          actionId: 'encode',
+          label: 'Encode',
+          mode: 'encode',
+          inputFields: ['inputValue'],
+          resultKind: 'text'
+        },
+        {
+          toolId: 'base64',
+          actionId: 'decode',
+          label: 'Decode',
+          mode: 'decode',
+          inputFields: ['inputValue'],
+          resultKind: 'text'
+        }
+      ]
+    }),
+    createToolDefinition({
+      id: 'hash',
+      slug: 'hash',
+      name: 'Hash Generator',
+      description: 'Create MD5, SHA-1, SHA-256, and SHA-512 hashes entirely in the browser.',
+      iconKey: 'hash',
+      accentToken: 'green',
+      order: 2,
+      category: 'Developer Utilities',
+      supportsCopy: true,
+      status: 'active',
+      keywords: ['hash', 'sha256', 'sha512', 'md5'],
+      supportedActions: [
+        {
+          toolId: 'hash',
+          actionId: 'generate-hash',
+          label: 'Generate hash',
+          mode: 'generate',
+          inputFields: ['algorithm', 'inputValue'],
+          resultKind: 'text',
+          helperText: 'MD5 and SHA-1 stay available for legacy compatibility.'
+        }
+      ]
+    }),
+    createToolDefinition({
+      id: 'cron',
+      slug: 'cron',
+      name: 'Cron Expression Generator',
+      description: 'Build 5-field or 6-field cron expressions and read them as plain language.',
+      iconKey: 'clock',
+      accentToken: 'yellow',
+      order: 3,
+      category: 'Scheduling',
+      supportsCopy: true,
+      status: 'active',
+      keywords: ['cron', 'schedule', 'expression'],
+      supportedActions: [
+        {
+          toolId: 'cron',
+          actionId: 'build-cron',
+          label: 'Build cron expression',
+          mode: 'build',
+          inputFields: ['fieldCount', 'seconds', 'minutes', 'hours', 'dayOfMonth', 'month', 'dayOfWeek'],
+          resultKind: 'expression'
+        }
+      ]
+    })
   ])
 );
 

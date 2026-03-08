@@ -3,6 +3,7 @@ import { cronDraftSchema } from '@/lib/validation/cron';
 describe('Cron schema', () => {
   it('accepts a valid six-field cron draft', () => {
     const parsed = cronDraftSchema.safeParse({
+      fieldCount: '6',
       seconds: '0',
       minutes: '*/15',
       hours: '*',
@@ -14,8 +15,23 @@ describe('Cron schema', () => {
     expect(parsed.success).toBe(true);
   });
 
-  it('requires all six cron fields', () => {
+  it('accepts a valid five-field cron draft without seconds', () => {
     const parsed = cronDraftSchema.safeParse({
+      fieldCount: '5',
+      seconds: '',
+      minutes: '*/15',
+      hours: '*',
+      dayOfMonth: '*',
+      month: '*',
+      dayOfWeek: '*'
+    });
+
+    expect(parsed.success).toBe(true);
+  });
+
+  it('requires seconds in six-field mode', () => {
+    const parsed = cronDraftSchema.safeParse({
+      fieldCount: '6',
       seconds: '',
       minutes: '*/15',
       hours: '*',
@@ -35,6 +51,7 @@ describe('Cron schema', () => {
 
   it('flags conflicting day-of-month and day-of-week selections', () => {
     const parsed = cronDraftSchema.safeParse({
+      fieldCount: '6',
       seconds: '0',
       minutes: '0',
       hours: '9',
@@ -59,7 +76,8 @@ describe('Cron schema', () => {
 
   it('rejects out-of-range values', () => {
     const parsed = cronDraftSchema.safeParse({
-      seconds: '0',
+      fieldCount: '5',
+      seconds: '',
       minutes: '61',
       hours: '9',
       dayOfMonth: '*',

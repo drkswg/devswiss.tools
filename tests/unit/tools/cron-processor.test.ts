@@ -3,6 +3,7 @@ import { buildCronExpression } from '@/lib/tools/processors/cron';
 describe('Cron processor', () => {
   it('builds a six-field cron expression with a readable summary', () => {
     const result = buildCronExpression({
+      fieldCount: '6',
       seconds: '0',
       minutes: '*/15',
       hours: '*',
@@ -16,8 +17,25 @@ describe('Cron processor', () => {
     expect(result.humanSummary).toContain('Every 15 minutes');
   });
 
+  it('builds a five-field cron expression with a readable summary', () => {
+    const result = buildCronExpression({
+      fieldCount: '5',
+      seconds: '',
+      minutes: '*/15',
+      hours: '*',
+      dayOfMonth: '*',
+      month: '*',
+      dayOfWeek: '*'
+    });
+
+    expect(result.state).toBe('valid');
+    expect(result.expression).toBe('*/15 * * * *');
+    expect(result.humanSummary).toContain('Every 15 minutes');
+  });
+
   it('summarizes a fixed daily time without wildcard filler', () => {
     const result = buildCronExpression({
+      fieldCount: '6',
       seconds: '0',
       minutes: '0',
       hours: '0',
@@ -31,8 +49,25 @@ describe('Cron processor', () => {
     expect(result.humanSummary).toBe('Every day at 12:00:00 AM');
   });
 
+  it('summarizes a fixed daily time in five-field mode without seconds', () => {
+    const result = buildCronExpression({
+      fieldCount: '5',
+      seconds: '',
+      minutes: '0',
+      hours: '0',
+      dayOfMonth: '*',
+      month: '*',
+      dayOfWeek: '*'
+    });
+
+    expect(result.state).toBe('valid');
+    expect(result.expression).toBe('0 0 * * *');
+    expect(result.humanSummary).toBe('Every day at 12:00 AM');
+  });
+
   it('clarifies that wildcard minutes and seconds cover the whole fixed hour', () => {
     const result = buildCronExpression({
+      fieldCount: '6',
       seconds: '*',
       minutes: '*',
       hours: '12',
@@ -46,8 +81,25 @@ describe('Cron processor', () => {
     expect(result.humanSummary).toBe('Every second during the 12:00 PM hour every day');
   });
 
+  it('clarifies that wildcard minutes cover the whole fixed hour in five-field mode', () => {
+    const result = buildCronExpression({
+      fieldCount: '5',
+      seconds: '',
+      minutes: '*',
+      hours: '12',
+      dayOfMonth: '*',
+      month: '*',
+      dayOfWeek: '*'
+    });
+
+    expect(result.state).toBe('valid');
+    expect(result.expression).toBe('* 12 * * *');
+    expect(result.humanSummary).toBe('Every minute during the 12:00 PM hour every day');
+  });
+
   it('returns field errors when the draft is incomplete', () => {
     const result = buildCronExpression({
+      fieldCount: '6',
       seconds: '',
       minutes: '*/15',
       hours: '*',
@@ -62,6 +114,7 @@ describe('Cron processor', () => {
 
   it('returns actionable errors for conflicting day selectors', () => {
     const result = buildCronExpression({
+      fieldCount: '6',
       seconds: '0',
       minutes: '0',
       hours: '9',

@@ -2,10 +2,12 @@ import { z } from 'zod';
 
 import { formatFieldErrors } from '@/lib/validation/common';
 
+export const cronFieldCounts = ['5', '6'] as const;
+export type CronFieldCount = (typeof cronFieldCounts)[number];
 export const cronFieldKeys = ['seconds', 'minutes', 'hours', 'dayOfMonth', 'month', 'dayOfWeek'] as const;
 export type CronFieldKey = (typeof cronFieldKeys)[number];
 
-export type CronDraft = Record<CronFieldKey, string>;
+export type CronDraft = { fieldCount: CronFieldCount } & Record<CronFieldKey, string>;
 
 type CronFieldRange = {
   label: string;
@@ -28,6 +30,7 @@ const fieldRanges: Record<CronFieldKey, CronFieldRange> = {
 };
 
 export const emptyCronDraft: CronDraft = {
+  fieldCount: '6',
   seconds: '',
   minutes: '',
   hours: '',
@@ -151,9 +154,20 @@ function fieldSchema(field: CronFieldKey) {
     });
 }
 
+function optionalFieldSchema(field: CronFieldKey) {
+  const range = fieldRanges[field];
+  return z
+    .string()
+    .trim()
+    .refine((value) => value.length === 0 || isValidCronFieldValue(value, field), {
+      message: `${range.label} value is invalid for this cron field.`
+    });
+}
+
 export const cronDraftSchema = z
   .object({
-    seconds: fieldSchema('seconds'),
+    fieldCount: z.enum(cronFieldCounts),
+    seconds: optionalFieldSchema('seconds'),
     minutes: fieldSchema('minutes'),
     hours: fieldSchema('hours'),
     dayOfMonth: fieldSchema('dayOfMonth'),
@@ -161,6 +175,14 @@ export const cronDraftSchema = z
     dayOfWeek: fieldSchema('dayOfWeek')
   })
   .superRefine((value, context) => {
+    if (value.fieldCount === '6' && value.seconds.length === 0) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['seconds'],
+        message: 'Seconds is required.'
+      });
+    }
+
     if (value.dayOfMonth === '*' || value.dayOfWeek === '*') {
       return;
     }
