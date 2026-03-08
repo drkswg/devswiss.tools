@@ -4,8 +4,18 @@ test.describe('Cron tool', () => {
   test('shows builder and explainer workflows together and explains a pasted expression', async ({ page, runAxe }) => {
     await page.goto('/tools/cron');
 
-    await expect(page.getByRole('heading', { name: /Explain a 5-field or 6-field cron expression/i })).toBeVisible();
-    await expect(page.getByRole('heading', { name: /Build a 5-field or 6-field cron expression/i })).toBeVisible();
+    const builderWorkflow = page.getByRole('region', { name: /Cron builder workflow/i });
+    const explainerWorkflow = page.getByRole('region', { name: /Cron explainer workflow/i });
+
+    await expect(builderWorkflow.getByRole('heading', { name: /Build a 5-field or 6-field cron expression/i })).toBeVisible();
+    await expect(explainerWorkflow.getByRole('heading', { name: /Explain a 5-field or 6-field cron expression/i })).toBeVisible();
+
+    const builderBox = await builderWorkflow.boundingBox();
+    const explainerBox = await explainerWorkflow.boundingBox();
+
+    expect(builderBox).not.toBeNull();
+    expect(explainerBox).not.toBeNull();
+    expect((builderBox?.x ?? 0) < (explainerBox?.x ?? 0)).toBe(true);
 
     await page.getByRole('textbox', { name: /Cron expression/i }).fill('0 */15 * * * *');
     await page.getByRole('button', { name: /Explain cron expression/i }).click();
@@ -94,5 +104,20 @@ test.describe('Cron tool', () => {
       /Choose either day of month or day of week/i
     );
     await runAxe('main');
+  });
+
+  test('stacks the builder and explainer workflows on a narrow viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 700, height: 1200 });
+    await page.goto('/tools/cron');
+
+    const builderWorkflow = page.getByRole('region', { name: /Cron builder workflow/i });
+    const explainerWorkflow = page.getByRole('region', { name: /Cron explainer workflow/i });
+    const builderBox = await builderWorkflow.boundingBox();
+    const explainerBox = await explainerWorkflow.boundingBox();
+
+    expect(builderBox).not.toBeNull();
+    expect(explainerBox).not.toBeNull();
+    expect(Math.abs((builderBox?.x ?? 0) - (explainerBox?.x ?? 0)) < 8).toBe(true);
+    expect((builderBox?.y ?? 0) < (explainerBox?.y ?? 0)).toBe(true);
   });
 });

@@ -118,30 +118,35 @@ export function CronTool() {
 
   return (
     <div className={styles.layout}>
-      <CronExplainer
-        expression={expression}
-        isSubmitting={isExplaining}
-        onExpressionChange={handleExpressionChange}
-        onSubmit={handleExplainSubmit}
-        result={explainResult}
-      />
-      <CronBuilder
-        draft={draft}
-        fieldErrors={fieldErrors}
-        isSubmitting={isSubmitting}
-        onFieldCountChange={handleFieldCountChange}
-        onFieldChange={handleFieldChange}
-        onSubmit={handleSubmit}
-      />
-      <CronErrors errors={result.errors} />
-      <CronSummary
-        copyFeedback={copyFeedback}
-        expression={result.expression}
-        humanSummary={result.humanSummary}
-        onCopy={result.state === 'valid' && result.expression ? handleCopy : undefined}
-        state={result.state}
-        statusTitle={result.message}
-      />
+      <section aria-label="Cron builder workflow" className={styles.workflowColumn}>
+        <CronBuilder
+          draft={draft}
+          fieldErrors={fieldErrors}
+          isSubmitting={isSubmitting}
+          onFieldCountChange={handleFieldCountChange}
+          onFieldChange={handleFieldChange}
+          onSubmit={handleSubmit}
+        />
+        <CronErrors errors={result.errors} />
+        <CronSummary
+          copyFeedback={copyFeedback}
+          expression={result.expression}
+          humanSummary={result.humanSummary}
+          onCopy={result.state === 'valid' && result.expression ? handleCopy : undefined}
+          state={result.state}
+          statusTitle={result.message}
+        />
+      </section>
+
+      <section aria-label="Cron explainer workflow" className={styles.workflowColumn}>
+        <CronExplainer
+          expression={expression}
+          isSubmitting={isExplaining}
+          onExpressionChange={handleExpressionChange}
+          onSubmit={handleExplainSubmit}
+          result={explainResult}
+        />
+      </section>
     </div>
   );
 }

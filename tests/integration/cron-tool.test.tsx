@@ -96,8 +96,11 @@ describe('Cron tool flow', () => {
   it('shows both the builder and explainer workflows on the cron page', () => {
     const { getByRole, getByText } = renderIntegration(<CronTool />);
 
-    expect(getByRole('heading', { name: /Explain a 5-field or 6-field cron expression/i })).toBeInTheDocument();
-    expect(getByRole('heading', { name: /Build a 5-field or 6-field cron expression/i })).toBeInTheDocument();
+    const builderWorkflow = getByRole('region', { name: /Cron builder workflow/i });
+    const explainerWorkflow = getByRole('region', { name: /Cron explainer workflow/i });
+
+    expect(within(builderWorkflow).getByRole('heading', { name: /Build a 5-field or 6-field cron expression/i })).toBeInTheDocument();
+    expect(within(explainerWorkflow).getByRole('heading', { name: /Explain a 5-field or 6-field cron expression/i })).toBeInTheDocument();
     expect(getByText(/Paste an existing cron expression/i)).toBeInTheDocument();
   });
 
