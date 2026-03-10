@@ -2,91 +2,98 @@
 
 ## Overview
 
-DevTools is a frontend-only Next.js 16 application built as a catalog of browser-first developer utilities. The current MVP exposes four tools:
+DevTools is a browser-first Next.js 16 application built as a registry-driven catalog of developer utilities. The current app exposes four tools:
 
 - UUID generator and validator
 - Base64 encoder and decoder
 - Hash generator
-- Cron expression generator
+- Cron builder and explainer
 
-The architecture is intentionally optimized for three things:
+The architecture is optimized for three things:
 
-1. Keep all core tool execution inside the browser.
-2. Keep the homepage and route shells lightweight and mostly static.
-3. Make new tools plug into a shared registry, visual system, and test strategy without redesigning the app.
+1. Keep tool execution inside the browser.
+2. Keep route modules thin and mostly static.
+3. Let new tools plug into a shared registry, visual system, and test strategy without redesigning the app shell.
 
 ## Core Architectural Decisions
 
-The implementation follows the current project direction enforced in the codebase:
+The current implementation follows these code-level decisions:
 
-- Next.js App Router is the application shell.
-- Server Components are the default for layouts, pages, metadata, and marketing/catalog content.
-- Client Components are used only where interaction is required.
-- There is no app-managed backend API for MVP tool processing.
-- Tool discovery is registry-driven, not hard-coded per page.
-- Shared UI primitives and design tokens keep tool pages visually and behaviorally consistent.
-- Validation and processing are separated from React components so tool logic stays testable.
+- Next.js App Router provides the application shell.
+- Server Components are the default for layout, page composition, metadata, and catalog content.
+- Client Components are used only for interactive tool workflows and global error recovery.
+- There is no app-managed backend API or route handler for tool execution.
+- `lib/tools/registry.ts` is the source of truth for discovery, route lookup, category metadata, and test consistency checks.
+- Validation and processing live in `lib/`, outside React components.
+- Shared UI primitives and design tokens keep tool pages structurally consistent while allowing tool-specific behavior.
 
 ## Constraints and Invariants
 
-These rules are visible across the codebase and current project conventions:
+These constraints are visible in the current codebase:
 
-- All initial tool processing must remain in-browser.
+- Tool input and output processing must remain browser-local.
 - Anonymous usage only; there are no accounts, persistence layers, or saved sessions.
-- The visual system uses IntelliJ IDEA-inspired dark surfaces with orange, green, blue, and yellow accents.
-- Desktop and mobile must use the same route model and interaction pattern.
-- New tools should be addable without changing the homepage navigation model.
-- Accessibility, performance, and copy-feedback states are treated as first-class requirements.
+- Free-text tool inputs are capped at `100_000` characters.
+- Tool definitions are validated with Zod and must keep unique ids, slugs, and route paths.
+- Supported action `toolId` values must match the owning tool definition.
+- Cron workflows currently support exactly 5-field and 6-field expressions.
+- Accessibility, performance, and copy-feedback behavior are treated as first-class requirements.
 
 ## High-Level Module Layout
 
 ```text
-app/          App Router entrypoints, layout, metadata, route shells, global boundaries
-components/   Reusable UI, catalog/marketing sections, tool shells, tool-specific clients
+app/          App Router entrypoints, metadata routes, route shells, global boundaries
+components/   Marketing sections, tool shells, shared UI primitives, tool-specific clients
 lib/          Tool registry, contracts, metadata helpers, processors, validation, utilities
 styles/       Global styles and design tokens
 tests/        Unit, integration, and end-to-end coverage
+openspec/     Change proposals, archived designs, and spec artifacts
 ```
 
-## Contract Surface
+## Route and Contract Surface
 
-The MVP intentionally defines no app-managed HTTP paths for tool execution. That is an architectural boundary, not missing work: request and response shapes may evolve later, but UUID, Base64, Hash, and Cron execution must remain browser-side in the current design.
+The app intentionally defines no HTTP contract for tool execution. Tool processors are invoked only from client-side React components.
+
+Current route surface:
+
+- `/` for the catalog landing page
+- `/tools/uuid`
+- `/tools/base64`
+- `/tools/hash`
+- `/tools/cron`
+- `/manifest.webmanifest` via `app/manifest.ts`
+
+Global boundaries are also part of the route shell:
+
+- `app/global-error.tsx`
+- `app/global-not-found.tsx`
 
 ## Runtime Architecture
 
 ### 1. App Shell
 
-`app/layout.tsx` defines the root document structure, loads fonts through `next/font`, applies global styles, and exports site-wide metadata and viewport settings from `lib/tools/metadata.ts`.
+`app/layout.tsx` defines the root document, loads `Space Grotesk` and `JetBrains Mono` through `next/font`, imports global styles, and exports site-wide metadata and viewport settings from `lib/tools/metadata.ts`.
 
-This layer is responsible for:
+Supporting shell-level routes and boundaries:
 
-- global HTML structure
-- typography setup
-- application metadata defaults
-- global styling import
+- `app/manifest.ts` provides the web app manifest.
+- `app/global-error.tsx` provides reset and recovery UI for unhandled render failures.
+- `app/global-not-found.tsx` handles unmatched routes.
 
-### 2. Route Shells
+### 2. Registry-Backed Route Shells
 
-The route layer is simple and mostly static:
+The route layer is intentionally thin:
 
-- `/` renders the marketing hero plus the registry-backed tool catalog
-- `/tools/uuid`
-- `/tools/base64`
-- `/tools/hash`
-- `/tools/cron`
+- `/` renders `Hero` plus `ToolCatalog`, both backed by `getAllTools()`.
+- each `/tools/<slug>` page imports one registry definition with `getRequiredToolBySlug(...)`
+- each tool page exports `buildToolMetadata(tool)`
+- each tool page renders `ToolPageShell` and mounts one tool-specific client island
 
-Each tool page follows the same composition pattern:
-
-1. Load the tool definition from `lib/tools/registry.ts`.
-2. Derive route metadata with `buildToolMetadata(...)`.
-3. Render `ToolPageShell`.
-4. Mount exactly one tool-specific interactive client component.
-
-This makes route ownership explicit while keeping most shared concerns out of tool components.
+The homepage also derives metadata keywords from registry keywords, so catalog copy and metadata stay aligned.
 
 ### 3. Client Tool Islands
 
-Interactive behavior lives in client components under `components/tools/**`.
+Interactive behavior lives under `components/tools/**`.
 
 Current client boundaries:
 
@@ -94,29 +101,35 @@ Current client boundaries:
 - `components/tools/base64/base64-tool.tsx`
 - `components/tools/hash/hash-tool.tsx`
 - `components/tools/cron/cron-tool.tsx`
-- supporting cron and result components
+- supporting cron and shared result components
 
 Each tool component owns:
 
 - local form state
-- local validation/error display state
+- local validation and status state
 - submit handling
 - copy-to-clipboard feedback
-- mapping processor output into shared result UI
+- mapping processor output into shared UI panels
 
 Each tool component does not own:
 
 - catalog registration
 - route metadata generation
-- global styling
 - low-level validation rules
-- actual transformation logic
+- transformation logic
+- clipboard implementation details
 
-That responsibility stays in `lib/`.
+That behavior stays in `lib/`.
+
+### 4. Execution Model by Tool
+
+- UUID and Base64 use synchronous submit flows.
+- Hash uses an async submit flow because SHA variants depend on `crypto.subtle`.
+- Cron contains two independent client workflows in one route: a guided builder and a pasted-expression explainer.
 
 ## Layering and Responsibilities
 
-The codebase naturally falls into five layers.
+The codebase falls into five main layers.
 
 ### Presentation Layer
 
@@ -125,11 +138,11 @@ Located in `app/` and `components/`.
 Responsibilities:
 
 - page composition
-- navigation
+- route-level navigation
 - responsive layout
 - accessibility semantics
-- visual consistency
 - status and feedback rendering
+- visual consistency
 
 Key building blocks:
 
@@ -149,10 +162,11 @@ Located in `lib/tools/`.
 Responsibilities:
 
 - define the canonical list of tools
-- validate registry shape
+- validate tool definition shape
 - enforce uniqueness of ids, slugs, and route paths
-- derive route metadata and canonical URLs
-- map tool icon keys to concrete Lucide icons
+- derive canonical route paths and metadata
+- maintain lookup maps by slug, id, and category
+- map icon keys to Lucide icons
 
 Key files:
 
@@ -172,10 +186,11 @@ Responsibilities:
 
 - define each tool's accepted input shape
 - normalize and validate input values
-- convert Zod errors into UI-friendly field error maps
-- enforce cross-field rules, especially for cron and UUID namespace/name requirements
+- convert Zod issues into UI-friendly `FieldErrors`
+- enforce tool-specific rules such as UUID namespace/name requirements and cron field conflicts
+- enforce shared input size limits for free-text tools
 
-Shared validation primitives live in `lib/validation/common.ts`.
+Shared primitives live in `lib/validation/common.ts`.
 
 Tool-specific validators:
 
@@ -191,16 +206,16 @@ Located in `lib/tools/processors/`.
 Responsibilities:
 
 - perform the actual tool operation
-- return consistent result objects for the UI
+- return typed result objects for the UI
 - distinguish `valid`, `invalid`, and `error` states
-- keep side effects minimal and browser-local
+- keep processing browser-local and side effects minimal
 
 Current processing strategy by tool:
 
 - UUID: `uuid` package for versions 1, 3, 4, 5, and 7
-- Base64: `TextEncoder`, `TextDecoder`, `btoa`, `atob`
-- Hash: Web Crypto for SHA algorithms, local MD5 implementation for compatibility
-- Cron: join validated fields and summarize using `cronstrue`
+- Base64: `TextEncoder`, `TextDecoder`, `btoa`, and `atob`
+- Hash: `crypto.subtle` for SHA algorithms plus a local MD5 implementation for compatibility
+- Cron: validated field assembly or expression parsing, then human summary generation through `cronstrue` plus local summary heuristics
 
 ### Utility Layer
 
@@ -209,7 +224,8 @@ Located in `lib/utils/`.
 Responsibilities:
 
 - clipboard behavior with modern API plus fallback
-- text normalization helpers reused by validation
+- shared text normalization and blank checks
+- small text helpers reused by validation and presentation
 
 Key files:
 
@@ -218,7 +234,7 @@ Key files:
 
 ## Domain Model
 
-The app is small, but it already has clear internal domains.
+The app is small, but the code already has clear internal domains.
 
 ### Domain: Tool Catalog
 
@@ -230,7 +246,7 @@ Core concepts:
 - `ToolActionDefinition`
 - homepage tile rendering
 - route derivation
-- ordering and category grouping
+- ordering and category metadata
 
 Source of truth:
 
@@ -239,7 +255,8 @@ Source of truth:
 Consumers:
 
 - homepage catalog
-- per-tool route metadata
+- per-tool page modules
+- metadata generation
 - tests that assert registry consistency
 
 ### Domain: UUID
@@ -289,15 +306,16 @@ Main files:
 
 Responsibilities:
 
-- guide users through six cron fields including seconds
-- validate field-level syntax
-- validate cross-field conflicts between day-of-month and day-of-week
-- produce both expression output and human-readable summary
+- build 5-field or 6-field cron expressions from guided selections
+- explain pasted 5-field or 6-field expressions
+- validate field syntax and cross-field conflicts
+- produce normalized expressions plus human-readable summaries
 
 Main files:
 
 - `components/tools/cron/cron-tool.tsx`
 - `components/tools/cron/cron-builder.tsx`
+- `components/tools/cron/cron-explainer.tsx`
 - `components/tools/cron/cron-summary.tsx`
 - `components/tools/cron/cron-errors.tsx`
 - `lib/validation/cron.ts`
@@ -310,8 +328,8 @@ Responsibilities:
 - buttons and field wrappers
 - result rendering
 - validation and status display
-- copy success/failure messaging
-- consistent dark-theme styling and focus treatment
+- copy success and failure messaging
+- consistent dark-surface styling and focus treatment
 
 Main files:
 
@@ -322,31 +340,32 @@ Main files:
 
 ## Request and Data Flow
 
-There is no backend request flow for tool execution. The runtime flow is local:
+There is no backend request flow for tool execution. Runtime data flow stays local:
 
-1. User opens a route rendered by the App Router.
-2. The page shell loads a tool definition from the registry.
-3. The tool client component renders form controls and local state.
-4. On submit, the component calls a processor in `lib/tools/processors/`.
+1. A page module resolves a tool definition from the registry.
+2. The server-rendered page shell mounts the tool's client component.
+3. The client component collects local form state.
+4. A submit handler calls a processor in `lib/tools/processors/`.
 5. The processor validates input through schemas in `lib/validation/`.
-6. The processor returns a typed result object.
-7. The client component renders shared status/result UI.
+6. The processor returns a typed result object with `message`, `state`, and optional payload fields.
+7. Shared presentation components render status, output, and copy feedback.
 8. Optional copy actions go through `lib/utils/clipboard.ts`.
 
-This separation keeps React components thin and makes non-UI behavior testable without browser navigation.
+This separation keeps React components thin and makes non-UI behavior testable without full browser navigation.
 
 ## Extensibility Model
 
-The project is designed around adding more tools without changing the core architecture.
+The project is designed to add more tools without changing the shell architecture.
 
-The expected workflow is:
+Expected workflow:
 
 1. Add a new `createToolDefinition(...)` entry in `lib/tools/registry.ts`.
-2. Add `app/tools/<slug>/page.tsx`.
-3. Add a client component under `components/tools/<slug>/`.
-4. Add validation in `lib/validation/`.
-5. Add processing in `lib/tools/processors/`.
-6. Add unit, integration, and e2e coverage.
+2. Choose an existing `iconKey` and accent token, or extend the tool contracts and icon map if needed.
+3. Add `app/tools/<slug>/page.tsx` and call `buildToolMetadata(tool)`.
+4. Add a client component under `components/tools/<slug>/`.
+5. Add validation in `lib/validation/`.
+6. Add processing in `lib/tools/processors/`.
+7. Add unit, integration, and e2e coverage.
 
 Important invariants enforced by code:
 
@@ -356,21 +375,21 @@ Important invariants enforced by code:
 - supported action `toolId` values must match the owning tool
 - route metadata falls back safely to `/tools/<slug>`
 
-This means the registry is not just presentation data; it is the app's structural contract for tool discovery and routing.
+The registry is therefore not just presentation data; it is the structural contract for tool discovery and routing.
 
 ## Styling Architecture
 
-Styling is split into:
+Styling is split across three levels:
 
-- `styles/tokens.css` for design tokens
-- `styles/globals.css` for global resets, shell rules, focus handling, and shared surfaces
+- `styles/tokens.css` for color, spacing, radius, shadow, and font tokens
+- `styles/globals.css` for resets, shell rules, background gradients, focus handling, and shared surfaces
 - CSS Modules colocated with components for local layout and component styling
 
-Notable styling decisions:
+Notable styling choices in the current code:
 
-- tokenized IntelliJ-inspired dark palette
-- `Space Grotesk` for display/body and `JetBrains Mono` for code-like content
-- surface-card pattern reused across marketing and tool screens
+- a dark surface system with orange, green, blue, and yellow accents
+- `Space Grotesk` for display and body text, `JetBrains Mono` for code-like content
+- the reusable `surface-card` pattern across marketing and tool screens
 - visible focus states and reduced-motion support
 
 ## Package and Dependency Roles
@@ -381,7 +400,7 @@ Notable styling decisions:
 - `zod`: runtime contracts for tool definitions and user input
 - `uuid`: UUID generation and validation
 - `cronstrue`: readable cron summaries
-- `lucide-react`: icon system for tiles and status surfaces
+- `lucide-react`: icon system for tiles, buttons, and status UI
 
 ### Development and Quality Dependencies
 
@@ -394,61 +413,57 @@ Notable styling decisions:
 
 The test suite mirrors the architectural layers.
 
-### Unit Tests
+### Unit and Integration Tests
 
-Located in `tests/unit/`.
+Vitest runs both `tests/unit/**/*.test.{ts,tsx}` and `tests/integration/**/*.test.{ts,tsx}` in `jsdom`.
 
 Focus:
 
 - processors
 - validation rules
 - registry invariants
-- metadata normalization
+- rendered React tool journeys
+- homepage catalog behavior
 
-These protect the pure logic in `lib/`.
-
-### Integration Tests
-
-Located in `tests/integration/`.
-
-Focus:
-
-- rendered React component journeys
-- catalog behavior
-- tool interactions without full browser navigation
-
-These validate that UI and processing layers are wired together correctly.
+These tests protect the pure logic in `lib/` and the wiring between client components and shared UI.
 
 ### End-to-End Tests
 
-Located in `tests/e2e/`.
+Playwright covers full route behavior in `tests/e2e/`.
 
 Focus:
 
-- route accessibility
+- homepage and tool-route happy paths
 - registry-to-route consistency
-- full user flows
+- accessibility smoke checks with axe
+- responsive cron layout behavior
 - performance budgets
 
-The Playwright layer also includes axe-based accessibility assertions and a production-mode performance budget test as part of the project verification workflow.
+Project coverage is currently:
+
+- Chromium and Firefox by default
+- WebKit when `CI=1` or `E2E_WEBKIT=1`
+- local `npm run dev` server in normal runs
+- `npm run build && npm run start` when `CI=1`
+
+The performance budgets suite runs only in CI mode and only on Chromium.
 
 ## Quality Attributes
 
-The architecture is designed around the project's non-functional targets:
+The current architecture is designed around these non-functional targets:
 
-- accessibility: keyboard-only operability, screen-reader-friendly labels and feedback, and dark-theme contrast
-- performance: core tool responses within 1 second for normal inputs, with route-level performance budgets validated in Playwright
-- consistency: new tools must reuse the same tile, route, metadata, and result patterns
-- resilience: invalid inputs should remain visible, with explicit error or empty states instead of crashes
+- accessibility: keyboard operability, screen-reader-friendly labels, and explicit status messaging
+- performance: fast local processing and route-level performance budget checks
+- consistency: new tools reuse the same tile, route, metadata, and result patterns
+- resilience: invalid inputs remain visible and are surfaced as actionable states instead of crashes
 
 ## Operational Characteristics
 
 ### Build and Runtime
 
-- Node.js 20.9+ and npm 10+ are the expected runtime/tooling baseline.
-- The app is built as a standard Next.js web application.
-- MVP routes are intended to stay statically renderable.
-- `next.config.ts` keeps `reactStrictMode` enabled and disables `X-Powered-By`.
+- Node.js 20.9+ and npm 10+ are the baseline.
+- `next.config.ts` enables `reactStrictMode`, disables `X-Powered-By`, and turns on experimental `globalNotFound`.
+- Current routes do not depend on remote data fetching, accounts, or persisted server-side state.
 
 ### Error and Recovery Model
 
@@ -458,19 +473,19 @@ Global failure handling exists through:
 - `app/global-not-found.tsx`
 - route-level loading UI for cron via `app/tools/cron/loading.tsx`
 
-Tool-level expected failures are handled inside processors and surfaced as validation or status messages rather than thrown exceptions.
+Expected tool failures are handled inside processors and surfaced as validation or status messages rather than uncaught exceptions.
 
-### CI and Quality Gates
+### Quality Gates
 
-GitHub Actions runs:
+Repository scripts expose the current verification workflow:
 
-- lint
-- typecheck
-- unit/integration tests
-- build
-- Playwright end-to-end tests
+- `npm run lint`
+- `npm run typecheck`
+- `npm run test`
+- `npm run build`
+- `npm run test:e2e`
 
-The quality gates align with the project verification workflow.
+Playwright automatically tightens retries and switches to production-server mode when `CI=1`.
 
 ## Architectural Non-Goals for the Current MVP
 
@@ -482,7 +497,7 @@ The current architecture intentionally does not include:
 - saved histories, shared workspaces, or collaboration state
 - dynamic remote tool registration
 
-These omissions are deliberate. They keep the application aligned with the browser-first, fast, anonymous utility model defined for the current MVP.
+These omissions keep the application aligned with the browser-first, fast, anonymous utility model.
 
 ## Future Evolution Notes
 
@@ -493,6 +508,6 @@ If the project grows, the current architecture is best extended by preserving th
 - add new client boundaries only where interaction genuinely requires them
 - introduce backend capabilities only for features that need secrets, persistence, or external integrations
 
-As long as those rules hold, the current structure can scale from four tools to a larger suite without changing the core navigation or rendering model.
+As long as those rules hold, the structure can scale from the current four tools to a larger suite without changing the core navigation model.
 
 
