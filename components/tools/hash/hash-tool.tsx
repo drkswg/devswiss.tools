@@ -82,66 +82,64 @@ export function HashTool() {
   }
 
   return (
-    <div className={styles.layout}>
-      <section className={`surface-card ${styles.panel}`}>
-        <div className={styles.panelHeader}>
-          <div className="section-heading">
-            <span className="section-eyebrow">Hash workflow</span>
-            <h2>Generate browser-side hashes</h2>
-            <p className="section-copy">
-              Choose an algorithm, hash plain text locally, and keep legacy compatibility algorithms clearly
-              labeled.
-            </p>
-          </div>
-          {legacySelected ? (
-            <div className={styles.legacyNotice}>
-              <AlertTriangle aria-hidden size={16} />
-              <span>{algorithmLabels[algorithm]} is a legacy option. Prefer SHA-256 or SHA-512 for new work.</span>
-            </div>
-          ) : null}
+    <section className={`surface-card ${styles.panel}`}>
+      <div className={styles.panelHeader}>
+        <div className="section-heading">
+          <span className="section-eyebrow">Hash workflow</span>
+          <h2>Generate browser-side hashes</h2>
+          <p className="section-copy">
+            Choose an algorithm, hash plain text locally, and keep legacy compatibility algorithms clearly
+            labeled.
+          </p>
         </div>
-
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <FormField
-            hint="MD5 and SHA-1 remain available for compatibility only."
-            htmlFor="hash-algorithm"
-            label="Algorithm"
-          >
-            <select id="hash-algorithm" onChange={(event) => setAlgorithm(event.target.value as HashAlgorithm)} value={algorithm}>
-              {hashAlgorithms.map((item) => (
-                <option key={item} value={item}>
-                  {algorithmLabels[item]}
-                  {isLegacyHashAlgorithm(item) ? ' (legacy)' : ''}
-                </option>
-              ))}
-            </select>
-          </FormField>
-
-          <FormField
-            error={fieldErrors.inputValue?.[0]}
-            hint="Input remains local to the browser during hashing."
-            htmlFor="hash-input"
-            label="Plain text"
-            required
-          >
-            <textarea
-              aria-describedby={getDescribedBy('hash-input', true, fieldErrors.inputValue?.[0])}
-              id="hash-input"
-              onChange={(event) => setInputValue(event.target.value)}
-              placeholder="Hash this value"
-              rows={8}
-              value={inputValue}
-            />
-          </FormField>
-
-          <div className={styles.actions}>
-            <Button type="submit">
-              <HashIcon aria-hidden size={16} />
-              {isSubmitting ? 'Generating hash...' : 'Generate hash'}
-            </Button>
+        {legacySelected ? (
+          <div className={styles.legacyNotice}>
+            <AlertTriangle aria-hidden size={16} />
+            <span>{algorithmLabels[algorithm]} is a legacy option. Prefer SHA-256 or SHA-512 for new work.</span>
           </div>
-        </form>
-      </section>
+        ) : null}
+      </div>
+
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <FormField
+          hint="MD5 and SHA-1 remain available for compatibility only."
+          htmlFor="hash-algorithm"
+          label="Algorithm"
+        >
+          <select id="hash-algorithm" onChange={(event) => setAlgorithm(event.target.value as HashAlgorithm)} value={algorithm}>
+            {hashAlgorithms.map((item) => (
+              <option key={item} value={item}>
+                {algorithmLabels[item]}
+                {isLegacyHashAlgorithm(item) ? ' (legacy)' : ''}
+              </option>
+            ))}
+          </select>
+        </FormField>
+
+        <FormField
+          error={fieldErrors.inputValue?.[0]}
+          hint="Input remains local to the browser during hashing."
+          htmlFor="hash-input"
+          label="Plain text"
+          required
+        >
+          <textarea
+            aria-describedby={getDescribedBy('hash-input', true, fieldErrors.inputValue?.[0])}
+            id="hash-input"
+            onChange={(event) => setInputValue(event.target.value)}
+            placeholder="Hash this value"
+            rows={8}
+            value={inputValue}
+          />
+        </FormField>
+
+        <div className={styles.actions}>
+          <Button type="submit">
+            <HashIcon aria-hidden size={16} />
+            {isSubmitting ? 'Generating hash...' : 'Generate hash'}
+          </Button>
+        </div>
+      </form>
 
       <ResultPanel
         copyFeedback={copyFeedback}
@@ -153,6 +151,6 @@ export function HashTool() {
         tone={result.legacy ? 'warning' : undefined}
         value={result.value}
       />
-    </div>
+    </section>
   );
 }

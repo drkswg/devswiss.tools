@@ -33,7 +33,7 @@ export function CronBuilder({
   const isSixField = draft.fieldCount === '6';
 
   return (
-    <section className={`surface-card ${styles.panel}`}>
+    <>
       <div className={styles.panelHeader}>
         <div className="section-heading">
           <span className="section-eyebrow">Cron builder</span>
@@ -207,6 +207,6 @@ export function CronBuilder({
           </Button>
         </div>
       </form>
-    </section>
+    </>
   );
 }

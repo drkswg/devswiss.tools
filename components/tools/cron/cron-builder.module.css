@@ -10,6 +10,7 @@
   align-content: start;
   gap: var(--space-xl);
   min-width: 0;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
 }
 
 .panel {
@@ -58,7 +59,8 @@
 .summaryPanel {
   display: grid;
   gap: var(--space-sm);
-  padding: clamp(1rem, 2.5vw, 1.4rem);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border-subtle);
 }
 
 .summaryTitle {

@@ -42,7 +42,7 @@ export function CronSummary({
         value={expression}
       />
 
-      <section aria-label="Readable schedule summary" className={`surface-card ${styles.summaryPanel}`}>
+      <section aria-label="Readable schedule summary" className={styles.summaryPanel}>
         <h3 className={styles.summaryTitle}>Readable summary</h3>
         <p className={styles.summaryText} data-state={summaryState}>
           {humanSummary ?? 'Generate a valid expression to preview the readable schedule summary.'}

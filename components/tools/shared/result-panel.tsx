@@ -60,7 +60,7 @@ export function ResultPanel({
   const canCopy = Boolean(onCopy && value);
 
   return (
-    <section aria-label={resultLabel} className={`surface-card ${styles.panel}`}>
+    <section aria-label={resultLabel} className={styles.panel}>
       <div className={styles.header}>
         <div className="section-heading">
           <span className="section-eyebrow">Output</span>

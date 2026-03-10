@@ -118,7 +118,7 @@ export function CronTool() {
 
   return (
     <div className={styles.layout}>
-      <section aria-label="Cron builder workflow" className={styles.workflowColumn}>
+      <section aria-label="Cron builder workflow" className={`surface-card ${styles.workflowColumn}`}>
         <CronBuilder
           draft={draft}
           fieldErrors={fieldErrors}
@@ -138,7 +138,7 @@ export function CronTool() {
         />
       </section>
 
-      <section aria-label="Cron explainer workflow" className={styles.workflowColumn}>
+      <section aria-label="Cron explainer workflow" className={`surface-card ${styles.workflowColumn}`}>
         <CronExplainer
           expression={expression}
           isSubmitting={isExplaining}

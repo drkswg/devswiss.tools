@@ -74,62 +74,60 @@ export function Base64Tool() {
   }
 
   return (
-    <div className={styles.layout}>
-      <section className={`surface-card ${styles.panel}`}>
-        <div className={styles.panelHeader}>
-          <div className="section-heading">
-            <span className="section-eyebrow">Base64 workflow</span>
-            <h2>{mode === 'encode' ? 'Encode text as Base64' : 'Decode Base64 to plain text'}</h2>
-            <p className="section-copy">
-              Unicode-safe text transforms stay in the browser, with explicit feedback for malformed or empty
-              input.
-            </p>
-          </div>
-          <div className={styles.modeSwitch} role="group" aria-label="Base64 action">
-            <Button
-              aria-pressed={mode === 'encode'}
-              onClick={() => handleModeChange('encode')}
-              variant={mode === 'encode' ? 'solid' : 'ghost'}
-              tone={mode === 'encode' ? 'accent' : 'neutral'}
-            >
-              <Binary aria-hidden size={16} />
-              Encode
-            </Button>
-            <Button
-              aria-pressed={mode === 'decode'}
-              onClick={() => handleModeChange('decode')}
-              variant={mode === 'decode' ? 'solid' : 'ghost'}
-              tone={mode === 'decode' ? 'accent' : 'neutral'}
-            >
-              <RefreshCcw aria-hidden size={16} />
-              Decode
-            </Button>
-          </div>
+    <section className={`surface-card ${styles.panel}`}>
+      <div className={styles.panelHeader}>
+        <div className="section-heading">
+          <span className="section-eyebrow">Base64 workflow</span>
+          <h2>{mode === 'encode' ? 'Encode text as Base64' : 'Decode Base64 to plain text'}</h2>
+          <p className="section-copy">
+            Unicode-safe text transforms stay in the browser, with explicit feedback for malformed or empty
+            input.
+          </p>
         </div>
-
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <FormField
-            error={fieldErrors.inputValue?.[0]}
-            hint={mode === 'encode' ? 'Plain text preserves Unicode characters when encoded.' : 'Whitespace is ignored while decoding.'}
-            htmlFor="base64-input"
-            label={mode === 'encode' ? 'Plain text' : 'Base64 input'}
-            required
+        <div className={styles.modeSwitch} role="group" aria-label="Base64 action">
+          <Button
+            aria-pressed={mode === 'encode'}
+            onClick={() => handleModeChange('encode')}
+            variant={mode === 'encode' ? 'solid' : 'ghost'}
+            tone={mode === 'encode' ? 'accent' : 'neutral'}
           >
-            <textarea
-              aria-describedby={getDescribedBy('base64-input', true, fieldErrors.inputValue?.[0])}
-              id="base64-input"
-              onChange={(event) => setInputValue(event.target.value)}
-              placeholder={mode === 'encode' ? 'Hello, DevTools 👋' : 'SGVsbG8sIERldlRvb2xzIPCfkYs='}
-              rows={8}
-              value={inputValue}
-            />
-          </FormField>
+            <Binary aria-hidden size={16} />
+            Encode
+          </Button>
+          <Button
+            aria-pressed={mode === 'decode'}
+            onClick={() => handleModeChange('decode')}
+            variant={mode === 'decode' ? 'solid' : 'ghost'}
+            tone={mode === 'decode' ? 'accent' : 'neutral'}
+          >
+            <RefreshCcw aria-hidden size={16} />
+            Decode
+          </Button>
+        </div>
+      </div>
 
-          <div className={styles.actions}>
-            <Button type="submit">{mode === 'encode' ? 'Encode text' : 'Decode text'}</Button>
-          </div>
-        </form>
-      </section>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <FormField
+          error={fieldErrors.inputValue?.[0]}
+          hint={mode === 'encode' ? 'Plain text preserves Unicode characters when encoded.' : 'Whitespace is ignored while decoding.'}
+          htmlFor="base64-input"
+          label={mode === 'encode' ? 'Plain text' : 'Base64 input'}
+          required
+        >
+          <textarea
+            aria-describedby={getDescribedBy('base64-input', true, fieldErrors.inputValue?.[0])}
+            id="base64-input"
+            onChange={(event) => setInputValue(event.target.value)}
+            placeholder={mode === 'encode' ? 'Hello, DevTools 👋' : 'SGVsbG8sIERldlRvb2xzIPCfkYs='}
+            rows={8}
+            value={inputValue}
+          />
+        </FormField>
+
+        <div className={styles.actions}>
+          <Button type="submit">{mode === 'encode' ? 'Encode text' : 'Decode text'}</Button>
+        </div>
+      </form>
 
       <ResultPanel
         copyFeedback={copyFeedback}
@@ -139,6 +137,6 @@ export function Base64Tool() {
         statusTitle={result.message}
         value={result.value}
       />
-    </div>
+    </section>
   );
 }

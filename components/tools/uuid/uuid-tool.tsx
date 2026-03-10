@@ -113,112 +113,110 @@ export function UuidTool() {
   }
 
   return (
-    <div className={styles.layout}>
-      <section className={`surface-card ${styles.panel}`}>
-        <div className={styles.panelHeader}>
-          <div className="section-heading">
-            <span className="section-eyebrow">UUID workflow</span>
-            <h2>{mode === 'generate' ? 'Generate a versioned UUID' : 'Validate a pasted UUID'}</h2>
-            <p className="section-copy">
-              DevTools keeps UUID generation and validation in-browser, with clear state handling for valid,
-              invalid, and empty inputs.
-            </p>
-          </div>
-          <div className={styles.modeSwitch} role="group" aria-label="UUID action">
-            <Button
-              aria-pressed={mode === 'generate'}
-              onClick={() => handleModeChange('generate')}
-              variant={mode === 'generate' ? 'solid' : 'ghost'}
-              tone={mode === 'generate' ? 'accent' : 'neutral'}
-            >
-              <DatabaseZap aria-hidden size={16} />
-              Generate
-            </Button>
-            <Button
-              aria-pressed={mode === 'validate'}
-              onClick={() => handleModeChange('validate')}
-              variant={mode === 'validate' ? 'solid' : 'ghost'}
-              tone={mode === 'validate' ? 'accent' : 'neutral'}
-            >
-              <ShieldCheck aria-hidden size={16} />
-              Validate
-            </Button>
-          </div>
+    <section className={`surface-card ${styles.panel}`}>
+      <div className={styles.panelHeader}>
+        <div className="section-heading">
+          <span className="section-eyebrow">UUID workflow</span>
+          <h2>{mode === 'generate' ? 'Generate a versioned UUID' : 'Validate a pasted UUID'}</h2>
+          <p className="section-copy">
+            DevTools keeps UUID generation and validation in-browser, with clear state handling for valid,
+            invalid, and empty inputs.
+          </p>
         </div>
+        <div className={styles.modeSwitch} role="group" aria-label="UUID action">
+          <Button
+            aria-pressed={mode === 'generate'}
+            onClick={() => handleModeChange('generate')}
+            variant={mode === 'generate' ? 'solid' : 'ghost'}
+            tone={mode === 'generate' ? 'accent' : 'neutral'}
+          >
+            <DatabaseZap aria-hidden size={16} />
+            Generate
+          </Button>
+          <Button
+            aria-pressed={mode === 'validate'}
+            onClick={() => handleModeChange('validate')}
+            variant={mode === 'validate' ? 'solid' : 'ghost'}
+            tone={mode === 'validate' ? 'accent' : 'neutral'}
+          >
+            <ShieldCheck aria-hidden size={16} />
+            Validate
+          </Button>
+        </div>
+      </div>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          {mode === 'generate' ? (
-            <>
-              <FormField htmlFor="uuid-version" hint="Versions 3 and 5 require namespace and name inputs." label="UUID version">
-                <select id="uuid-version" onChange={(event) => setVersion(event.target.value as SupportedUuidVersion)} value={version}>
-                  {supportedUuidVersions.map((item) => (
-                    <option key={item} value={item}>
-                      {versionLabels[item]}
-                    </option>
-                  ))}
-                </select>
-              </FormField>
-
-              {requiresNamespace ? (
-                <div className={styles.splitFields}>
-                  <FormField
-                    error={fieldErrors.namespace?.[0]}
-                    hint="Default namespace starts with the DNS UUID. Replace it with any valid UUID namespace."
-                    htmlFor="uuid-namespace"
-                    label="Namespace UUID"
-                    required
-                  >
-                    <input
-                      aria-describedby={getDescribedBy('uuid-namespace', true, fieldErrors.namespace?.[0])}
-                      id="uuid-namespace"
-                      onChange={(event) => setNamespace(event.target.value)}
-                      placeholder={defaultUuidNamespace}
-                      value={namespace}
-                    />
-                  </FormField>
-
-                  <FormField
-                    error={fieldErrors.name?.[0]}
-                    hint="The same namespace and name always produce the same UUID."
-                    htmlFor="uuid-name"
-                    label="Name"
-                    required
-                  >
-                    <input
-                      aria-describedby={getDescribedBy('uuid-name', true, fieldErrors.name?.[0])}
-                      id="uuid-name"
-                      onChange={(event) => setName(event.target.value)}
-                      placeholder="service.devtools.local"
-                      value={name}
-                    />
-                  </FormField>
-                </div>
-              ) : null}
-            </>
-          ) : (
-            <FormField
-              error={fieldErrors.value?.[0]}
-              hint="Paste a UUID version 1, 3, 4, 5, or 7."
-              htmlFor="uuid-value"
-              label="UUID value"
-              required
-            >
-              <textarea
-                aria-describedby={getDescribedBy('uuid-value', true, fieldErrors.value?.[0])}
-                id="uuid-value"
-                onChange={(event) => setValue(event.target.value)}
-                placeholder="018f8ce1-20dd-7f48-a78a-bb4f80b2c5fb"
-                rows={4}
-                value={value}
-              />
+      <form className={styles.form} onSubmit={handleSubmit}>
+        {mode === 'generate' ? (
+          <>
+            <FormField htmlFor="uuid-version" hint="Versions 3 and 5 require namespace and name inputs." label="UUID version">
+              <select id="uuid-version" onChange={(event) => setVersion(event.target.value as SupportedUuidVersion)} value={version}>
+                {supportedUuidVersions.map((item) => (
+                  <option key={item} value={item}>
+                    {versionLabels[item]}
+                  </option>
+                ))}
+              </select>
             </FormField>
-          )}
 
-          <div className={styles.actions}>
-            <Button type="submit">{submitLabel}</Button>
-          </div>
-        </form>
-      </section>
+            {requiresNamespace ? (
+              <div className={styles.splitFields}>
+                <FormField
+                  error={fieldErrors.namespace?.[0]}
+                  hint="Default namespace starts with the DNS UUID. Replace it with any valid UUID namespace."
+                  htmlFor="uuid-namespace"
+                  label="Namespace UUID"
+                  required
+                >
+                  <input
+                    aria-describedby={getDescribedBy('uuid-namespace', true, fieldErrors.namespace?.[0])}
+                    id="uuid-namespace"
+                    onChange={(event) => setNamespace(event.target.value)}
+                    placeholder={defaultUuidNamespace}
+                    value={namespace}
+                  />
+                </FormField>
+
+                <FormField
+                  error={fieldErrors.name?.[0]}
+                  hint="The same namespace and name always produce the same UUID."
+                  htmlFor="uuid-name"
+                  label="Name"
+                  required
+                >
+                  <input
+                    aria-describedby={getDescribedBy('uuid-name', true, fieldErrors.name?.[0])}
+                    id="uuid-name"
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="service.devtools.local"
+                    value={name}
+                  />
+                </FormField>
+              </div>
+            ) : null}
+          </>
+        ) : (
+          <FormField
+            error={fieldErrors.value?.[0]}
+            hint="Paste a UUID version 1, 3, 4, 5, or 7."
+            htmlFor="uuid-value"
+            label="UUID value"
+            required
+          >
+            <textarea
+              aria-describedby={getDescribedBy('uuid-value', true, fieldErrors.value?.[0])}
+              id="uuid-value"
+              onChange={(event) => setValue(event.target.value)}
+              placeholder="018f8ce1-20dd-7f48-a78a-bb4f80b2c5fb"
+              rows={4}
+              value={value}
+            />
+          </FormField>
+        )}
+
+        <div className={styles.actions}>
+          <Button type="submit">{submitLabel}</Button>
+        </div>
+      </form>
 
       <ResultPanel
         copyFeedback={copyFeedback}
@@ -230,6 +228,6 @@ export function UuidTool() {
         tone={helperTone}
         value={result.value}
       />
-    </div>
+    </section>
   );
 }

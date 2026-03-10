@@ -33,44 +33,42 @@ export function CronExplainer({
   const summaryState = result.humanSummary ? 'valid' : 'idle';
 
   return (
-    <div className={styles.summaryStack}>
-      <section className={`surface-card ${styles.panel}`}>
-        <div className={styles.panelHeader}>
-          <div className="section-heading">
-            <span className="section-eyebrow">Cron explainer</span>
-            <h2>Explain a 5-field or 6-field cron expression</h2>
-            <p className="section-copy">
-              Paste an existing cron expression to see its normalized schedule and a plain-language explanation.
-            </p>
-          </div>
+    <>
+      <div className={styles.panelHeader}>
+        <div className="section-heading">
+          <span className="section-eyebrow">Cron explainer</span>
+          <h2>Explain a 5-field or 6-field cron expression</h2>
+          <p className="section-copy">
+            Paste an existing cron expression to see its normalized schedule and a plain-language explanation.
+          </p>
         </div>
+      </div>
 
-        <form className={styles.form} onSubmit={onSubmit}>
-          <FormField
-            error={expressionError}
-            hint='Enter a 5-field expression such as "*/15 * * * *" or a 6-field expression such as "0 */15 * * * *".'
-            htmlFor="cron-expression-input"
-            label="Cron expression"
-            required
-          >
-            <textarea
-              aria-describedby={describedBy(expressionError)}
-              className={styles.expressionInput}
-              id="cron-expression-input"
-              onChange={(event) => onExpressionChange(event.target.value)}
-              placeholder="0 */15 * * * *"
-              rows={4}
-              value={expression}
-            />
-          </FormField>
+      <form className={styles.form} onSubmit={onSubmit}>
+        <FormField
+          error={expressionError}
+          hint='Enter a 5-field expression such as "*/15 * * * *" or a 6-field expression such as "0 */15 * * * *".'
+          htmlFor="cron-expression-input"
+          label="Cron expression"
+          required
+        >
+          <textarea
+            aria-describedby={describedBy(expressionError)}
+            className={styles.expressionInput}
+            id="cron-expression-input"
+            onChange={(event) => onExpressionChange(event.target.value)}
+            placeholder="0 */15 * * * *"
+            rows={4}
+            value={expression}
+          />
+        </FormField>
 
-          <div className={styles.actions}>
-            <Button type="submit">
-              {isSubmitting ? 'Explaining...' : 'Explain cron expression'}
-            </Button>
-          </div>
-        </form>
-      </section>
+        <div className={styles.actions}>
+          <Button type="submit">
+            {isSubmitting ? 'Explaining...' : 'Explain cron expression'}
+          </Button>
+        </div>
+      </form>
 
       <CronErrors errors={result.errors} />
 
@@ -81,12 +79,12 @@ export function CronExplainer({
         value={result.expression}
       />
 
-      <section aria-label="Cron explanation summary" className={`surface-card ${styles.summaryPanel}`}>
+      <section aria-label="Cron explanation summary" className={styles.summaryPanel}>
         <h3 className={styles.summaryTitle}>Readable explanation</h3>
         <p className={styles.summaryText} data-state={summaryState}>
           {result.humanSummary ?? 'Explain a valid cron expression to preview the schedule in plain language.'}
         </p>
       </section>
-    </div>
+    </>
   );
 }

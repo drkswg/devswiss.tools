@@ -1,7 +1,9 @@
 .panel {
   display: grid;
   gap: var(--space-lg);
-  padding: clamp(1.25rem, 3vw, 1.75rem);
+  min-width: 0;
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border-subtle);
 }
 
 .header {
