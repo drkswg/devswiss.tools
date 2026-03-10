@@ -25,7 +25,6 @@ export default function Base64Page() {
         </>
       }
       description={tool.description}
-      helperText="Encode or decode text safely, including Unicode input. Invalid Base64 stays visible and returns clear guidance."
       title={tool.name}
     >
       <Base64Tool />

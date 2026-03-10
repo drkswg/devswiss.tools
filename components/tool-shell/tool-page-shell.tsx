@@ -10,7 +10,6 @@ type ToolPageShellProps = {
   children: ReactNode;
   description: string;
   eyebrow?: string;
-  helperText?: string;
   title: string;
 };
 
@@ -20,7 +19,6 @@ export function ToolPageShell({
   children,
   description,
   eyebrow = 'Developer Utility',
-  helperText,
   title
 }: Readonly<ToolPageShellProps>) {
   return (
@@ -33,7 +31,6 @@ export function ToolPageShell({
             <p className={styles.description}>{description}</p>
           </div>
         </div>
-        {helperText ? <p className={styles.helper}>{helperText}</p> : null}
         {actions ? <div className={styles.actions}>{actions}</div> : null}
       </section>
       <section className={styles.content}>{children}</section>

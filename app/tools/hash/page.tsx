@@ -25,7 +25,6 @@ export default function HashPage() {
         </>
       }
       description={tool.description}
-      helperText="Generate lowercase hexadecimal hashes locally. MD5 and SHA-1 remain visible as legacy options."
       title={tool.name}
     >
       <HashTool />

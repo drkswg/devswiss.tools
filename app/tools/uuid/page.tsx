@@ -25,7 +25,6 @@ export default function UuidPage() {
         </>
       }
       description={tool.description}
-      helperText="Generate fresh UUIDs or validate pasted values, including versions 1, 3, 4, 5, and 7."
       title={tool.name}
     >
       <UuidTool />

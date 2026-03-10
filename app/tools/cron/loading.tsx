@@ -8,7 +8,6 @@ export default function CronLoading() {
     <ToolPageShell
       accent={tool.accentToken}
       description={tool.description}
-      helperText="Preparing the cron builder controls and summary panel."
       title={tool.name}
     >
       <section
