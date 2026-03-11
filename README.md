@@ -1,6 +1,6 @@
-# DevTools
+# devswiss.tools
 
-DevTools is a browser-first Next.js 16 application that ships a small suite of developer utilities. Tool execution stays in the browser: there is no app-managed backend API for UUID generation, Base64 transforms, hashing, cron workflows, or XML processing.
+devswiss.tools is a browser-first Next.js 16 application that ships a small suite of developer utilities. Tool execution stays in the browser: there is no app-managed backend API for UUID generation, Base64 transforms, hashing, cron workflows, or XML processing.
 
 ## Current Tools
 

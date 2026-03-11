@@ -45,7 +45,7 @@ const scenarios: PerfScenario[] = [
     name: 'Base64 tool',
     route: '/tools/base64',
     runInteraction: async (page) => {
-      await page.getByLabel(/Plain text/i).fill('hello devtools');
+      await page.getByLabel(/Plain text/i).fill('hello devswiss.tools');
       await page.getByRole('button', { name: /Encode text/i }).click();
     }
   },
@@ -53,7 +53,7 @@ const scenarios: PerfScenario[] = [
     name: 'Hash tool',
     route: '/tools/hash',
     runInteraction: async (page) => {
-      await page.getByLabel(/Plain text/i).fill('hello devtools');
+      await page.getByLabel(/Plain text/i).fill('hello devswiss.tools');
       await page.getByRole('button', { name: /Generate hash/i }).click();
     }
   },
@@ -111,14 +111,14 @@ test.describe('Performance budgets', () => {
       await page.addInitScript(() => {
         const metrics = { cls: 0, inp: 0, lcp: 0 };
         const store = window as Window & {
-          __devtoolsVitals?: {
+          __devswissToolsVitals?: {
             cls: number;
             inp: number;
             lcp: number;
           };
         };
 
-        store.__devtoolsVitals = metrics;
+        store.__devswissToolsVitals = metrics;
 
         try {
           new PerformanceObserver((entryList) => {
@@ -169,7 +169,7 @@ test.describe('Performance budgets', () => {
 
       const routeMetrics = await page.evaluate(() => {
         const store = window as Window & {
-          __devtoolsVitals?: {
+          __devswissToolsVitals?: {
             cls: number;
             inp: number;
             lcp: number;
@@ -183,10 +183,10 @@ test.describe('Performance budgets', () => {
           .reduce((total, entry) => total + (entry.transferSize || entry.encodedBodySize || 0), 0);
 
         return {
-          cls: store.__devtoolsVitals?.cls ?? 0,
-          inp: store.__devtoolsVitals?.inp ?? 0,
+          cls: store.__devswissToolsVitals?.cls ?? 0,
+          inp: store.__devswissToolsVitals?.inp ?? 0,
           jsBytes,
-          lcp: store.__devtoolsVitals?.lcp ?? 0
+          lcp: store.__devswissToolsVitals?.lcp ?? 0
         };
       });
 

@@ -1,7 +1,7 @@
 import HomePage from '@/app/page';
 import { renderIntegration } from '@/tests/integration/test-utils';
 
-describe('DevTools homepage catalog', () => {
+describe('devswiss.tools homepage catalog', () => {
   it('renders the hero and all registered tool tiles', () => {
     const { getByRole, getAllByRole } = renderIntegration(<HomePage />);
 

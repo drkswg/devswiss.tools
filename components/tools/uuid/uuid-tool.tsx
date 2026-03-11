@@ -119,8 +119,8 @@ export function UuidTool() {
           <span className="section-eyebrow">UUID workflow</span>
           <h2>{mode === 'generate' ? 'Generate a versioned UUID' : 'Validate a pasted UUID'}</h2>
           <p className="section-copy">
-            DevTools keeps UUID generation and validation in-browser, with clear state handling for valid,
-            invalid, and empty inputs.
+            devswiss.tools keeps UUID generation and validation in-browser, with clear state handling for
+            valid, invalid, and empty inputs.
           </p>
         </div>
         <div className={styles.modeSwitch} role="group" aria-label="UUID action">
@@ -187,7 +187,7 @@ export function UuidTool() {
                     aria-describedby={getDescribedBy('uuid-name', true, fieldErrors.name?.[0])}
                     id="uuid-name"
                     onChange={(event) => setName(event.target.value)}
-                    placeholder="service.devtools.local"
+                    placeholder="service.devswiss.tools"
                     value={name}
                   />
                 </FormField>

@@ -23,7 +23,7 @@ export default function GlobalError({
           <section className="surface-card" style={{ padding: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
             <div className="section-heading">
               <span className="section-eyebrow">Global Error</span>
-              <h1>Something interrupted the DevTools workspace.</h1>
+              <h1>Something interrupted the devswiss.tools workspace.</h1>
               <p className="section-copy">
                 Refresh the state and try again. If the problem persists, reload the page and retry the
                 previous action.

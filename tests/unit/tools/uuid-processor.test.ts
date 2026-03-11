@@ -29,7 +29,7 @@ describe('UUID processor', () => {
   });
 
   it('validates supported UUID versions', () => {
-    const candidate = uuidV5('devtools.local', defaultUuidNamespace);
+    const candidate = uuidV5('devswiss.tools', defaultUuidNamespace);
     const result = validateUuidValue({
       mode: 'validate',
       value: candidate

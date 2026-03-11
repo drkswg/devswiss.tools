@@ -23,10 +23,10 @@ test.describe('Core tools', () => {
     const base64Input = page.getByLabel(/Plain text/i);
     await expect(base64Input).toBeVisible();
     await base64Input.fill('');
-    await base64Input.type('hello devtools');
-    await expect(base64Input).toHaveValue('hello devtools');
+    await base64Input.type('hello devswiss.tools');
+    await expect(base64Input).toHaveValue('hello devswiss.tools');
     await page.getByRole('button', { name: /Encode text/i }).click();
-    await expect(page.getByText('aGVsbG8gZGV2dG9vbHM=')).toBeVisible();
+    await expect(page.getByText('aGVsbG8gZGV2c3dpc3MudG9vbHM=')).toBeVisible();
     await runAxe('main');
 
     await page.goto('/tools/hash');

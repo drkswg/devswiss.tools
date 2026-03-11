@@ -17,11 +17,11 @@ describe('Core tool journeys', () => {
   it('encodes text in the Base64 tool', async () => {
     const { user, getByLabelText, getByRole, getByText } = renderIntegration(<Base64Tool />);
 
-    await user.type(getByLabelText(/Plain text/i), 'Hello, DevTools 👋');
+    await user.type(getByLabelText(/Plain text/i), 'Hello, devswiss.tools 👋');
     await user.click(getByRole('button', { name: /Encode text/i }));
 
     expect(getByText(/Encoded the text as Base64/i)).toBeInTheDocument();
-    expect(getByText('SGVsbG8sIERldlRvb2xzIPCfkYs=')).toBeInTheDocument();
+    expect(getByText('SGVsbG8sIGRldnN3aXNzLnRvb2xzIPCfkYs=')).toBeInTheDocument();
   });
 
   it('hashes text and reports copy feedback', async () => {

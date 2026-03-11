@@ -5,7 +5,7 @@ import '@/styles/globals.css';
 
 export const metadata: Metadata = {
   title: 'Not found',
-  description: 'The requested DevTools page could not be found.'
+  description: 'The requested devswiss.tools page could not be found.'
 };
 
 export default function GlobalNotFound() {
@@ -16,7 +16,7 @@ export default function GlobalNotFound() {
           <section className="surface-card" style={{ padding: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
             <div className="section-heading">
               <span className="section-eyebrow">404</span>
-              <h1>This DevTools route does not exist.</h1>
+              <h1>This devswiss.tools route does not exist.</h1>
               <p className="section-copy">
                 Return to the catalog and pick one of the available tools. Unmatched routes are handled by
                 the global 404 boundary.

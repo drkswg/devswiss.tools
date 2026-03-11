@@ -118,7 +118,7 @@ export function validateUuidValue(input: { mode: 'validate'; value: string }): U
     return {
       state: 'invalid',
       value: candidate,
-      message: `UUID version ${detectedVersion} is not supported in DevTools.`
+      message: `UUID version ${detectedVersion} is not supported in devswiss.tools.`
     };
   }
 

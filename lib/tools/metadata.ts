@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 
 import type { ToolDefinition } from '@/lib/tools/contracts';
 
-export const siteName = 'DevTools';
+export const siteName = 'devswiss.tools';
 export const siteDescription =
   'Elegant browser-first utilities for UUIDs, Base64 transforms, XML formatting, hashing, and cron expression workflows.';
 

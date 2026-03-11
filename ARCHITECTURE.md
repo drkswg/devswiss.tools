@@ -1,8 +1,8 @@
-# DevTools Architecture
+# devswiss.tools Architecture
 
 ## Overview
 
-DevTools is a browser-first Next.js 16 application built as a registry-driven suite of developer utilities. The current app exposes five tools:
+devswiss.tools is a browser-first Next.js 16 application built as a registry-driven suite of developer utilities. The current app exposes five tools:
 
 - UUID generator and validator
 - Base64 encoder and decoder

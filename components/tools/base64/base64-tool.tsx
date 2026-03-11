@@ -118,7 +118,7 @@ export function Base64Tool() {
             aria-describedby={getDescribedBy('base64-input', true, fieldErrors.inputValue?.[0])}
             id="base64-input"
             onChange={(event) => setInputValue(event.target.value)}
-            placeholder={mode === 'encode' ? 'Hello, DevTools 👋' : 'SGVsbG8sIERldlRvb2xzIPCfkYs='}
+            placeholder={mode === 'encode' ? 'Hello, devswiss.tools 👋' : 'SGVsbG8sIGRldnN3aXNzLnRvb2xzIPCfkYs='}
             rows={8}
             value={inputValue}
           />

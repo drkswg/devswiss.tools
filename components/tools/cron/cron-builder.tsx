@@ -39,8 +39,8 @@ export function CronBuilder({
           <span className="section-eyebrow">Cron builder</span>
           <h2>Build a 5-field or 6-field cron expression</h2>
           <p className="section-copy">
-            Choose whether to include seconds, then fill each cron field from guided options. DevTools
-            validates incomplete or conflicting choices before generating an expression.
+            Choose whether to include seconds, then fill each cron field from guided options.
+            devswiss.tools validates incomplete or conflicting choices before generating an expression.
           </p>
         </div>
       </div>
