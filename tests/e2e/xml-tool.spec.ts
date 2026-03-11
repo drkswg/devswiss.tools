@@ -8,19 +8,27 @@ test.describe('XML formatter tool', () => {
 
     const sourceWorkflow = page.getByRole('region', { name: /XML source workflow/i });
     const outputWorkflow = page.getByRole('region', { name: /XML output workflow/i });
+    const sourceTextarea = page.getByLabel(/Original XML/i);
+    const outputTextarea = page.getByLabel(/Transformed output/i);
     const sourceBox = await sourceWorkflow.boundingBox();
     const outputBox = await outputWorkflow.boundingBox();
+    const sourceTextareaBox = await sourceTextarea.boundingBox();
+    const outputTextareaBox = await outputTextarea.boundingBox();
 
     expect(sourceBox).not.toBeNull();
     expect(outputBox).not.toBeNull();
+    expect(sourceTextareaBox).not.toBeNull();
+    expect(outputTextareaBox).not.toBeNull();
     expect((sourceBox?.x ?? 0) < (outputBox?.x ?? 0)).toBe(true);
+    expect(Math.abs((sourceTextareaBox?.y ?? 0) - (outputTextareaBox?.y ?? 0)) < 8).toBe(true);
+    expect(Math.abs((sourceTextareaBox?.height ?? 0) - (outputTextareaBox?.height ?? 0)) < 8).toBe(true);
 
-    await page.getByLabel(/Original XML/i).fill(compactXml);
+    await sourceTextarea.fill(compactXml);
     await page.getByLabel(/Format indentation/i).selectOption('4');
     await page.getByRole('button', { name: /Format XML/i }).click();
 
     await expect(page.getByText(/XML formatted with 4-space indentation/i)).toBeVisible();
-    await expect(page.getByLabel(/Transformed output/i)).toHaveValue(
+    await expect(outputTextarea).toHaveValue(
       ['<root>', '    <item id="1">alpha</item>', '    <item id="2">', '        <name>beta</name>', '    </item>', '</root>'].join(
         '\n'
       )
@@ -75,12 +83,20 @@ test.describe('XML formatter tool', () => {
 
     const sourceWorkflow = page.getByRole('region', { name: /XML source workflow/i });
     const outputWorkflow = page.getByRole('region', { name: /XML output workflow/i });
+    const sourceTextarea = page.getByLabel(/Original XML/i);
+    const outputTextarea = page.getByLabel(/Transformed output/i);
     const sourceBox = await sourceWorkflow.boundingBox();
     const outputBox = await outputWorkflow.boundingBox();
+    const sourceTextareaBox = await sourceTextarea.boundingBox();
+    const outputTextareaBox = await outputTextarea.boundingBox();
 
     expect(sourceBox).not.toBeNull();
     expect(outputBox).not.toBeNull();
+    expect(sourceTextareaBox).not.toBeNull();
+    expect(outputTextareaBox).not.toBeNull();
     expect(Math.abs((sourceBox?.x ?? 0) - (outputBox?.x ?? 0)) < 8).toBe(true);
     expect((sourceBox?.y ?? 0) < (outputBox?.y ?? 0)).toBe(true);
+    expect(Math.abs((sourceTextareaBox?.x ?? 0) - (outputTextareaBox?.x ?? 0)) < 8).toBe(true);
+    expect((sourceTextareaBox?.y ?? 0) < (outputTextareaBox?.y ?? 0)).toBe(true);
   });
 });

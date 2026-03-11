@@ -198,16 +198,17 @@ export function XmlTool() {
               Keep the original document on the left, then choose an explicit action to format, minify, or convert it.
             </p>
           </div>
-          <div className={styles.toolbar}>
-            <Button onClick={() => fileInputRef.current?.click()} tone="neutral" variant="outline">
-              <FileUp aria-hidden size={16} />
-              Upload XML
-            </Button>
-            <Button onClick={handleCopySource} tone="neutral" variant="ghost">
-              <Copy aria-hidden size={16} />
-              Copy source
-            </Button>
-          </div>
+        </div>
+
+        <div className={styles.paneToolbar}>
+          <Button onClick={() => fileInputRef.current?.click()} tone="neutral" variant="outline">
+            <FileUp aria-hidden size={16} />
+            Upload XML
+          </Button>
+          <Button onClick={handleCopySource} tone="neutral" variant="ghost">
+            <Copy aria-hidden size={16} />
+            Copy source
+          </Button>
           <input
             accept=".xml,text/xml,application/xml"
             className={styles.fileInput}
@@ -217,7 +218,7 @@ export function XmlTool() {
           />
         </div>
 
-        <div className={styles.controlStack}>
+        <div className={styles.editorRegion}>
           <FormField
             error={fieldErrors.inputValue?.[0]}
             hint="Malformed XML stays in place so you can correct it without losing the last valid result."
@@ -227,7 +228,7 @@ export function XmlTool() {
           >
             <textarea
               aria-describedby={fieldErrors.inputValue?.[0] ? 'xml-source-error xml-source-hint' : 'xml-source-hint'}
-              className={styles.textarea}
+              className={`${styles.textarea} ${styles.editorTextarea}`}
               id="xml-source"
               onChange={(event) => handleInputChange(event.target.value)}
               placeholder="<root><item id=&quot;1&quot;>value</item></root>"
@@ -236,7 +237,9 @@ export function XmlTool() {
               value={inputValue}
             />
           </FormField>
+        </div>
 
+        <div className={styles.supportStack}>
           <div className={styles.metaRow}>
             <FormField
               hint="Indentation only applies to the format action."
@@ -288,32 +291,29 @@ export function XmlTool() {
               The right pane keeps the last valid result available for copy. XML downloads stay available only for XML output.
             </p>
           </div>
-          <div className={styles.toolbar}>
-            <Button disabled={!output?.value} onClick={handleCopyOutput} tone="neutral" variant="ghost">
-              <Copy aria-hidden size={16} />
-              Copy output
-            </Button>
-            {output?.kind === 'xml' && output.value ? (
-              <Button onClick={handleDownload} tone="neutral" variant="outline">
-                <Download aria-hidden size={16} />
-                Download XML
-              </Button>
-            ) : null}
-          </div>
         </div>
 
-        <div className={styles.outputStatus}>
-          <StatusMessage title={status.message} tone={resolveTone(status.state)}>
-            <p>{output?.kind === 'json' ? 'The latest result is JSON text.' : 'The latest result is XML text.'}</p>
-          </StatusMessage>
+        <div className={styles.paneToolbar}>
+          <Button disabled={!output?.value} onClick={handleCopyOutput} tone="neutral" variant="ghost">
+            <Copy aria-hidden size={16} />
+            Copy output
+          </Button>
+          {output?.kind === 'xml' && output.value ? (
+            <Button onClick={handleDownload} tone="neutral" variant="outline">
+              <Download aria-hidden size={16} />
+              Download XML
+            </Button>
+          ) : null}
+        </div>
 
+        <div className={styles.editorRegion}>
           <FormField
             hint={output ? `Current output type: ${outputLabel}.` : 'No result yet. Submit an action from the source pane.'}
             htmlFor="xml-output"
             label="Transformed output"
           >
             <textarea
-              className={styles.textarea}
+              className={`${styles.textarea} ${styles.editorTextarea}`}
               id="xml-output"
               placeholder="Formatted XML or JSON will appear here."
               readOnly
@@ -322,7 +322,12 @@ export function XmlTool() {
               value={output?.value ?? ''}
             />
           </FormField>
+        </div>
 
+        <div className={styles.supportStack}>
+          <StatusMessage title={status.message} tone={resolveTone(status.state)}>
+            <p>{output?.kind === 'json' ? 'The latest result is JSON text.' : 'The latest result is XML text.'}</p>
+          </StatusMessage>
           {outputFeedback ? (
             <StatusMessage title={outputFeedback.title} tone={outputFeedback.tone}>
               {outputFeedback.description ? <p>{outputFeedback.description}</p> : null}

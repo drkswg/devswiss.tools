@@ -1,15 +1,17 @@
 .layout {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: start;
+  align-items: stretch;
   gap: var(--space-xl);
 }
 
 .pane {
   display: grid;
-  gap: var(--space-lg);
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  align-items: start;
   min-width: 0;
   padding: clamp(1.25rem, 3vw, 1.75rem);
+  min-height: clamp(42rem, 78vh, 58rem);
 }
 
 .paneHeader {
@@ -17,31 +19,54 @@
   gap: var(--space-sm);
 }
 
-.controlStack {
+.paneToolbar,
+.supportStack,
+.editorRegion {
   display: grid;
   gap: var(--space-lg);
 }
 
-.toolbar,
 .buttonGroup,
-.metaRow {
+.metaRow,
+.paneToolbar {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
   align-items: center;
 }
 
-.toolbar {
-  margin-top: var(--space-sm);
+.paneToolbar {
+  align-content: start;
+  min-block-size: 2.75rem;
 }
 
 .indentField {
   max-width: 14rem;
 }
 
+.editorRegion {
+  min-height: 0;
+}
+
+.editorRegion > div {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  min-height: 100%;
+}
+
+.editorRegion > div > div:nth-of-type(2) {
+  min-height: 0;
+}
+
 .textarea {
-  min-height: 24rem;
+  min-height: clamp(22rem, 45vh, 36rem);
+  block-size: 100%;
+  inline-size: 100%;
   resize: vertical;
+}
+
+.editorTextarea {
+  block-size: 100%;
 }
 
 .textarea[readonly] {
@@ -56,21 +81,24 @@
   color: var(--color-text-secondary);
 }
 
-.outputStatus {
-  display: grid;
-  gap: var(--space-sm);
-}
-
 @media (max-width: 1080px) {
   .layout {
     grid-template-columns: 1fr;
   }
+
+  .pane {
+    min-height: auto;
+  }
 }
 
 @media (max-width: 720px) {
-  .toolbar,
   .buttonGroup,
-  .metaRow {
+  .metaRow,
+  .paneToolbar {
     display: grid;
+  }
+
+  .textarea {
+    min-height: clamp(18rem, 52vh, 28rem);
   }
 }
