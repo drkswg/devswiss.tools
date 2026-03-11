@@ -1,6 +1,6 @@
 import { createToolDefinition } from '@/lib/tools/create-tool-definition';
 import { buildToolMetadata } from '@/lib/tools/metadata';
-import { createToolRegistry } from '@/lib/tools/registry';
+import { createToolRegistry, getRequiredToolBySlug } from '@/lib/tools/registry';
 
 describe('Tool registry invariants', () => {
   function createFixture(overrides: Partial<ReturnType<typeof createToolDefinition>> = {}) {
@@ -55,6 +55,14 @@ describe('Tool registry invariants', () => {
     expect(() => createToolRegistry(definitions)).toThrowError(
       /Duplicate tool route path: \/tools\/shared-path/
     );
+  });
+
+  it('includes the bcrypt tool in the registry with the expected route and copy support', () => {
+    const bcryptTool = getRequiredToolBySlug('bcrypt');
+
+    expect(bcryptTool.routePath).toBe('/tools/bcrypt');
+    expect(bcryptTool.supportsCopy).toBe(true);
+    expect(bcryptTool.order).toBe(3);
   });
 });
 

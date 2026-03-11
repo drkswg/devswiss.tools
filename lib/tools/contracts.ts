@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const accentTokens = ['orange', 'green', 'blue', 'yellow'] as const;
 export const iconKeys = ['binary', 'clock', 'fingerprint', 'hash', 'sparkles', 'wrench'] as const;
 export const toolStatuses = ['active', 'coming-soon'] as const;
-export const toolActionModes = ['generate', 'validate', 'encode', 'decode', 'build', 'format', 'minify', 'convert'] as const;
+export const toolActionModes = ['generate', 'validate', 'encode', 'decode', 'build', 'format', 'minify', 'convert', 'hash'] as const;
 export const toolResultKinds = ['text', 'status', 'expression'] as const;
 
 export type AccentToken = (typeof accentTokens)[number];

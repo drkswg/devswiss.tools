@@ -122,13 +122,37 @@ export const toolRegistry = Object.freeze(
       ]
     }),
     createToolDefinition({
+      id: 'bcrypt',
+      slug: 'bcrypt',
+      name: 'Bcrypt Hash Generator',
+      description: 'Generate salted bcrypt password hashes locally with adjustable rounds from 1 through 20.',
+      iconKey: 'hash',
+      accentToken: 'green',
+      order: 3,
+      category: 'Developer Utilities',
+      supportsCopy: true,
+      status: 'active',
+      keywords: ['bcrypt', 'password', 'hash', 'rounds'],
+      supportedActions: [
+        {
+          toolId: 'bcrypt',
+          actionId: 'generate-bcrypt',
+          label: 'Generate bcrypt hash',
+          mode: 'hash',
+          inputFields: ['inputValue', 'rounds'],
+          resultKind: 'text',
+          helperText: 'Bcrypt adds a fresh salt each time, so repeated runs can produce different valid hashes.'
+        }
+      ]
+    }),
+    createToolDefinition({
       id: 'cron',
       slug: 'cron',
       name: 'Cron Expression Generator',
       description: 'Build 5-field or 6-field cron expressions and read them as plain language.',
       iconKey: 'clock',
       accentToken: 'yellow',
-      order: 3,
+      order: 4,
       category: 'Scheduling',
       supportsCopy: true,
       status: 'active',
@@ -151,7 +175,7 @@ export const toolRegistry = Object.freeze(
       description: 'Beautify XML, minify it, convert it to JSON, and move files in or out locally.',
       iconKey: 'wrench',
       accentToken: 'blue',
-      order: 4,
+      order: 5,
       category: 'Developer Utilities',
       supportsCopy: true,
       status: 'active',

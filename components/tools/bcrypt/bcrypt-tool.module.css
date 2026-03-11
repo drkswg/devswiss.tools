@@ -1,0 +1,52 @@
+.panel {
+  display: grid;
+  gap: var(--space-xl);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.panelHeader {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.guidance {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(92, 165, 123, 0.22);
+  border-radius: var(--radius-md);
+  background: rgba(92, 165, 123, 0.08);
+}
+
+.guidanceTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-foreground);
+}
+
+.guidanceCopy {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.roundsMeta {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+@media (max-width: 720px) {
+  .actions {
+    display: grid;
+  }
+}

@@ -1,4 +1,5 @@
 import Base64Page from '@/app/tools/base64/page';
+import BcryptPage from '@/app/tools/bcrypt/page';
 import CronPage from '@/app/tools/cron/page';
 import HashPage from '@/app/tools/hash/page';
 import UuidPage from '@/app/tools/uuid/page';
@@ -25,10 +26,18 @@ const toolPages = [
   },
   {
     helperText: 'Generate lowercase hexadecimal hashes locally. MD5 and SHA-1 remain visible as legacy options.',
-    nextHref: '/tools/cron',
-    nextLabel: 'Next: Cron',
+    nextHref: '/tools/bcrypt',
+    nextLabel: 'Next: Bcrypt',
     page: HashPage,
     tool: getRequiredToolBySlug('hash')
+  },
+  {
+    helperText:
+      'Bcrypt adds a fresh salt each time, so repeated runs can produce different valid hashes.',
+    nextHref: '/tools/cron',
+    nextLabel: 'Next: Cron',
+    page: BcryptPage,
+    tool: getRequiredToolBySlug('bcrypt')
   },
   {
     helperText:
