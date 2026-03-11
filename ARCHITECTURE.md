@@ -2,11 +2,12 @@
 
 ## Overview
 
-devswiss.tools is a browser-first Next.js 16 application built as a registry-driven suite of developer utilities. The current app exposes five tools:
+devswiss.tools is a browser-first Next.js 16 application built as a registry-driven suite of developer utilities. The current app exposes six tools:
 
 - UUID generator and validator
 - Base64 encoder and decoder
 - Hash generator
+- Bcrypt hash generator
 - Cron expression generator and explainer
 - XML formatter, minifier, and XML-to-JSON converter
 
@@ -26,6 +27,7 @@ Primary routes:
 - `/tools/uuid`
 - `/tools/base64`
 - `/tools/hash`
+- `/tools/bcrypt`
 - `/tools/cron`
 - `/tools/xml`
 - `/manifest.webmanifest` via `app/manifest.ts`
@@ -101,6 +103,7 @@ Examples:
 - `app/tools/uuid/page.tsx`
 - `app/tools/base64/page.tsx`
 - `app/tools/hash/page.tsx`
+- `app/tools/bcrypt/page.tsx`
 - `app/tools/cron/page.tsx`
 - `app/tools/xml/page.tsx`
 
@@ -158,7 +161,7 @@ Key details:
 
 - free-text inputs are capped at `100_000` characters
 - validation states are normalized to `idle`, `valid`, `invalid`, and `error`
-- XML, cron, UUID, Base64, and hash inputs each have dedicated schemas
+- XML, cron, UUID, Base64, hash, and bcrypt inputs each have dedicated schemas
 
 ### 3. Processing Layer
 
@@ -176,6 +179,7 @@ Current execution model by tool:
 - UUID: synchronous generation and validation via `uuid`
 - Base64: synchronous Unicode-safe encoding and decoding
 - Hash: asynchronous hashing because SHA algorithms depend on `crypto.subtle`; MD5 is implemented locally for compatibility
+- Bcrypt: asynchronous salted password hashing via `bcryptjs` with adjustable rounds from 1 through 20
 - Cron: synchronous builder and explainer flows with `cronstrue` summaries plus local human-summary heuristics
 - XML: synchronous DOM-based parsing, formatting, minifying, and deterministic JSON conversion using `DOMParser` and `XMLSerializer`
 
@@ -269,6 +273,21 @@ Responsibilities:
 - generate `md5`, `sha1`, `sha256`, and `sha512`
 - label MD5 and SHA-1 as legacy options
 - return lowercase hexadecimal output
+
+### Bcrypt
+
+Files:
+
+- `components/tools/bcrypt/bcrypt-tool.tsx`
+- `lib/validation/bcrypt.ts`
+- `lib/tools/processors/bcrypt.ts`
+
+Responsibilities:
+
+- generate salted bcrypt password hashes locally
+- accept configurable rounds from `1` through `20`
+- keep hashing asynchronous and browser-local through `bcryptjs`
+- explain that repeated runs can return different valid hashes because each run uses a fresh salt
 
 ### Cron
 
@@ -364,6 +383,7 @@ Coverage includes:
 - homepage and direct route navigation
 - registry-to-route consistency
 - axe accessibility smoke checks
+- bcrypt salted-hash generation and validation-error journeys
 - responsive layout assertions for Cron and XML
 - performance budgets in CI mode
 
@@ -374,7 +394,7 @@ Important runtime details:
 - Chromium and Firefox are always configured
 - WebKit is enabled when `CI=1` or `E2E_WEBKIT=1`
 
-Performance budget coverage currently includes the homepage plus UUID, Base64, Hash, and Cron scenarios. XML has functional e2e coverage but is not yet part of `tests/e2e/performance-budgets.spec.ts`.
+Performance budget coverage currently includes the homepage plus UUID, Base64, Hash, and Cron scenarios. Bcrypt and XML have functional e2e coverage but are not yet part of `tests/e2e/performance-budgets.spec.ts`.
 
 ## Operational Characteristics
 

@@ -5,7 +5,7 @@ Auto-generated from all feature plans. Last updated: 2026-03-11
 ## Active Technologies
 
 - TypeScript 5.9 on Node.js 20.9+ + Next.js 16 App Router, React 19, next/font, CSS Modules, CSS custom properties
-- Runtime libraries: lucide-react, uuid, cronstrue, zod
+- Runtime libraries: bcryptjs, lucide-react, uuid, cronstrue, zod
 - Browser APIs: Web Crypto, DOMParser/XMLSerializer, Clipboard API with legacy fallback, File/FileReader, Blob object URLs
 - Test stack: Vitest, React Testing Library, Playwright, @axe-core/playwright
 
@@ -15,6 +15,7 @@ Auto-generated from all feature plans. Last updated: 2026-03-11
 - `/tools/uuid` UUID generate/validate workflow for versions 1, 3, 4, 5, and 7
 - `/tools/base64` Base64 encode/decode workflow with Unicode-safe text handling
 - `/tools/hash` browser-side hash generator for MD5, SHA-1, SHA-256, and SHA-512
+- `/tools/bcrypt` bcrypt hash generator with adjustable rounds from 1 through 20, fresh salts, and copy-ready output
 - `/tools/cron` combined cron builder and cron explainer for 5-field and 6-field expressions
 - `/tools/xml` two-pane XML formatter, minifier, XML-to-JSON converter, and local file import/export workflow
 - Shell boundaries: `app/global-error.tsx`, `app/global-not-found.tsx`, `app/tools/cron/loading.tsx`, `app/manifest.ts`
@@ -61,16 +62,16 @@ openspec/               Spec artifacts, proposals, and archived changes
 ## Testing Expectations
 
 - `tests/unit/` covers registry invariants, validation schemas, and processor logic.
-- `tests/integration/` covers homepage rendering, route wiring, and tool component journeys in `jsdom`.
-- `tests/e2e/` covers direct routes, registry consistency, accessibility smoke checks, and responsive layouts.
-- Performance budgets currently run only in CI mode and currently cover the homepage plus UUID, Base64, Hash, and Cron flows.
+- `tests/integration/` covers homepage rendering, route wiring, tool page headers, and tool component journeys in `jsdom`.
+- `tests/e2e/` covers direct routes, registry consistency, accessibility smoke checks, bcrypt and XML workflows, and responsive layouts.
+- Performance budgets currently run only in CI mode and currently cover the homepage plus UUID, Base64, Hash, and Cron flows. Bcrypt and XML keep functional e2e coverage only.
 
 ## Recent Changes
 
-- Added the XML Formatter tool with format, minify, convert-to-JSON, upload, and download workflows.
-- Tightened the shared tool-page header pattern and sequential tool navigation across routes.
-- Expanded the cron route into side-by-side builder and explainer workflows with responsive layout coverage.
+- Added the bcrypt hash generator with adjustable rounds, fresh salts per run, and clipboard-ready output.
+- Added bcrypt unit, integration, e2e, and registry coverage and inserted the route into the sequential tool-page navigation flow.
 - Rebalanced the XML formatter into a matched two-pane layout with resilient output retention after invalid input.
+- Expanded the cron route into side-by-side builder and explainer workflows with responsive layout coverage.
 
 <!-- MANUAL ADDITIONS START -->
 - Use PowerShell for npm commands in this repository. If machine-specific command wrappers or local resource paths are needed, read `LOCAL.md` when it exists.

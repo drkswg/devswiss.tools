@@ -1,12 +1,13 @@
 # devswiss.tools
 
-devswiss.tools is a browser-first Next.js 16 application that ships a small suite of developer utilities. Tool execution stays in the browser: there is no app-managed backend API for UUID generation, Base64 transforms, hashing, cron workflows, or XML processing.
+devswiss.tools is a browser-first Next.js 16 application that ships a small suite of developer utilities. Tool execution stays in the browser: there is no app-managed backend API for UUID generation, Base64 transforms, hashing, bcrypt password hashing, cron workflows, or XML processing.
 
 ## Current Tools
 
 - UUID generator and validator for versions 1, 3, 4, 5, and 7
 - Base64 encoder and decoder with Unicode-safe text handling
 - Hash generator for MD5, SHA-1, SHA-256, and SHA-512
+- Bcrypt hash generator with adjustable rounds, fresh salts, and copy-ready output
 - Cron builder and explainer for 5-field and 6-field expressions
 - XML formatter, minifier, and XML-to-JSON converter with local file upload and XML download
 
@@ -16,7 +17,7 @@ devswiss.tools is a browser-first Next.js 16 application that ships a small suit
 - React 19
 - TypeScript 5.9
 - CSS Modules + shared design tokens
-- zod, uuid, cronstrue, lucide-react
+- zod, uuid, bcryptjs, cronstrue, lucide-react
 - Vitest + React Testing Library
 - Playwright + axe-core
 
@@ -42,6 +43,7 @@ Open `http://localhost:3000`.
 - `/tools/uuid` UUID generator and validator
 - `/tools/base64` Base64 encoder and decoder
 - `/tools/hash` hash generator
+- `/tools/bcrypt` bcrypt hash generator
 - `/tools/cron` cron expression builder and explainer
 - `/tools/xml` XML formatter and converter
 
@@ -87,7 +89,7 @@ openspec/               Change proposals, archived tasks, and specs
 
 ## Architecture Summary
 
-The app is registry-driven. `lib/tools/registry.ts` is the source of truth for tool discovery, ordering, route paths, keywords, and supported actions. Each tool route resolves one registry entry, exports metadata with `buildToolMetadata(tool)`, and renders a shared `ToolPageShell`.
+The app is registry-driven. `lib/tools/registry.ts` is the source of truth for tool discovery, ordering, route paths, keywords, and supported actions. Each tool route resolves one registry entry, exports metadata with `buildToolMetadata(tool)`, and renders a shared `ToolPageShell` with consistent catalog and next-tool navigation.
 
 Interactive behavior lives in client components under `components/tools/`. Validation lives in `lib/validation/`, processors live in `lib/tools/processors/`, and browser-specific helpers such as clipboard and local file handling live in `lib/utils/`. This keeps route modules thin and makes the transformation logic easy to test without full browser navigation.
 
