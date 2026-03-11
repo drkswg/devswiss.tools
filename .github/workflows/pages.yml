@@ -37,6 +37,7 @@ jobs:
         env:
           GITHUB_PAGES: 'true'
           GITHUB_REPOSITORY: ${{ github.repository }}
+          PAGES_BASE_PATH: ''
 
       - name: Disable Jekyll processing
         run: touch out/.nojekyll
