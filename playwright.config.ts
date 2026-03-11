@@ -30,7 +30,8 @@ export default defineConfig({
     trace: 'on-first-retry'
   },
   webServer: {
-    command: process.env.CI ? 'npm run build && npm run start' : 'npm run dev',
+    // `next start` is incompatible with `output: 'export'`; serve the static export in CI.
+    command: process.env.CI ? 'npm run build && npx serve@latest out -l 3000' : 'npm run dev',
     url: 'http://127.0.0.1:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120000
