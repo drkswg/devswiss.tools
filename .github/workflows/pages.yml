@@ -35,7 +35,7 @@ jobs:
       - name: Build static export
         run: npm run build
         env:
-          GITHUB_ACTIONS: 'true'
+          GITHUB_PAGES: 'true'
           GITHUB_REPOSITORY: ${{ github.repository }}
 
       - name: Disable Jekyll processing
