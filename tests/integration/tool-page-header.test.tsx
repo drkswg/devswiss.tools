@@ -2,6 +2,7 @@ import Base64Page from '@/app/tools/base64/page';
 import CronPage from '@/app/tools/cron/page';
 import HashPage from '@/app/tools/hash/page';
 import UuidPage from '@/app/tools/uuid/page';
+import XmlPage from '@/app/tools/xml/page';
 import { getRequiredToolBySlug } from '@/lib/tools/registry';
 import { renderIntegration } from '@/tests/integration/test-utils';
 
@@ -32,10 +33,18 @@ const toolPages = [
   {
     helperText:
       'Generate either a 5-field cron expression or a 6-field expression with seconds. A fixed hour with "*" minutes, and "*" seconds in 6-field mode, means the whole hour. Single daily runs need explicit time values such as "0 0 * * *" or "0 0 0 * * *".',
-    nextHref: '/tools/uuid',
-    nextLabel: 'Next: UUID',
+    nextHref: '/tools/xml',
+    nextLabel: 'Next: XML',
     page: CronPage,
     tool: getRequiredToolBySlug('cron')
+  },
+  {
+    helperText:
+      'Beautify XML with configurable indentation, minify it, convert it to JSON, and move XML in or out with local file actions.',
+    nextHref: '/tools/uuid',
+    nextLabel: 'Next: UUID',
+    page: XmlPage,
+    tool: getRequiredToolBySlug('xml')
   }
 ] as const;
 

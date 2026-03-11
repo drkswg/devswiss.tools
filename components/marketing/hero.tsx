@@ -15,7 +15,7 @@ export function Hero() {
         <div className={`section-heading ${styles.heading}`}>
           <h1 className={styles.title}>Your data stays in the browser.</h1>
           <p className={styles.description}>
-            DevTools gives you UUID, Base64, hash, and cron utilities without sending inputs to a
+            DevTools gives you UUID, Base64, XML, hash, and cron utilities without sending inputs to a
             server.
           </p>
         </div>

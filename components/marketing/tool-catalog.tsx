@@ -17,12 +17,14 @@ type ToolCatalogProps = {
 };
 
 export function ToolCatalog({
-  description = 'Open browser-based utilities for UUIDs, Base64 text, hashes, and cron expressions.',
+  description = 'Open browser-based utilities for UUIDs, Base64 text, XML formatting, hashes, and cron expressions.',
   eyebrow = 'Tool Catalog',
   id,
   title = 'Common developer utilities, available as direct routes.',
   tools = getAllTools()
 }: Readonly<ToolCatalogProps>) {
+  const resolvedTitle = title.trim() || 'Available developer tools';
+
   const catalogTools = [...tools].sort((left, right) => {
     const orderDiff = left.order - right.order;
 
@@ -38,7 +40,7 @@ export function ToolCatalog({
       <section className={styles.wrapper} id={id}>
         <div className="section-heading">
           <span className="section-eyebrow">{eyebrow}</span>
-          {title ? <h2>{title}</h2> : null}
+          <h2 className={title ? undefined : 'visually-hidden'}>{resolvedTitle}</h2>
           {description ? <p className="section-copy">{description}</p> : null}
         </div>
         <div className={styles.empty}>No tools are available yet.</div>
@@ -50,7 +52,7 @@ export function ToolCatalog({
     <section className={styles.wrapper} id={id}>
       <div className="section-heading">
         <span className="section-eyebrow">{eyebrow}</span>
-        {title ? <h2>{title}</h2> : null}
+        <h2 className={title ? undefined : 'visually-hidden'}>{resolvedTitle}</h2>
         {description ? <p className="section-copy">{description}</p> : null}
       </div>
       <div className={styles.grid}>

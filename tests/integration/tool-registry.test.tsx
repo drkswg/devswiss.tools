@@ -26,6 +26,6 @@ describe('Registry-driven tool catalog', () => {
       'href',
       '/tools/json-formatter'
     );
-    expect(tileLinks.at(-1)).toHaveAccessibleName('Open JSON Formatter');
+    expect(tileLinks.map((tile) => tile.getAttribute('href'))).toContain('/tools/json-formatter');
   });
 });

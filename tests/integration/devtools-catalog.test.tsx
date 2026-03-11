@@ -12,9 +12,9 @@ describe('DevTools homepage catalog', () => {
     ).toBeInTheDocument();
     expect(
       getAllByRole('link', {
-        name: /^Open (UUID Generator & Validator|Base64 Encoder & Decoder|Hash Generator|Cron Expression Generator)$/i
+        name: /^Open (UUID Generator & Validator|Base64 Encoder & Decoder|Hash Generator|Cron Expression Generator|XML Formatter)$/i
       })
-    ).toHaveLength(4);
+    ).toHaveLength(5);
     expect(getByRole('link', { name: /Open UUID Generator & Validator/i })).toHaveAttribute(
       'href',
       '/tools/uuid'
@@ -23,5 +23,6 @@ describe('DevTools homepage catalog', () => {
       'href',
       '/tools/cron'
     );
+    expect(getByRole('link', { name: /Open XML Formatter/i })).toHaveAttribute('href', '/tools/xml');
   });
 });

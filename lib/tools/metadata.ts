@@ -4,7 +4,7 @@ import type { ToolDefinition } from '@/lib/tools/contracts';
 
 export const siteName = 'DevTools';
 export const siteDescription =
-  'Elegant browser-first utilities for UUIDs, Base64 transforms, hashing, and cron expression workflows.';
+  'Elegant browser-first utilities for UUIDs, Base64 transforms, XML formatting, hashing, and cron expression workflows.';
 
 export const siteMetadata: Metadata = {
   applicationName: siteName,
@@ -13,7 +13,7 @@ export const siteMetadata: Metadata = {
     template: `%s | ${siteName}`
   },
   description: siteDescription,
-  keywords: ['developer tools', 'uuid', 'base64', 'hash generator', 'cron expression'],
+  keywords: ['developer tools', 'uuid', 'base64', 'xml formatter', 'hash generator', 'cron expression'],
   manifest: '/manifest.webmanifest',
   openGraph: {
     title: siteName,

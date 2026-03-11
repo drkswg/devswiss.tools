@@ -1,0 +1,76 @@
+.layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--space-xl);
+}
+
+.pane {
+  display: grid;
+  gap: var(--space-lg);
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.paneHeader {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.controlStack {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.toolbar,
+.buttonGroup,
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.toolbar {
+  margin-top: var(--space-sm);
+}
+
+.indentField {
+  max-width: 14rem;
+}
+
+.textarea {
+  min-height: 24rem;
+  resize: vertical;
+}
+
+.textarea[readonly] {
+  background: color-mix(in srgb, var(--color-bg-field) 80%, black);
+}
+
+.fileInput {
+  display: none;
+}
+
+.hint {
+  color: var(--color-text-secondary);
+}
+
+.outputStatus {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+@media (max-width: 1080px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .toolbar,
+  .buttonGroup,
+  .metaRow {
+    display: grid;
+  }
+}

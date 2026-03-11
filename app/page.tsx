@@ -33,7 +33,7 @@ export default function HomePage() {
     <main className="site-shell" style={mainStyles}>
       <Hero />
       <ToolCatalog
-        description="Generate UUIDs, encode Base64 text, create hashes, and build cron expressions directly in the browser."
+        description="Generate UUIDs, encode Base64 text, format XML, create hashes, and build cron expressions directly in the browser."
         eyebrow="Core Utilities"
         id="tool-catalog"
         title=""

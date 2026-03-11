@@ -143,6 +143,48 @@ export const toolRegistry = Object.freeze(
           resultKind: 'expression'
         }
       ]
+    }),
+    createToolDefinition({
+      id: 'xml',
+      slug: 'xml',
+      name: 'XML Formatter',
+      description: 'Beautify XML, minify it, convert it to JSON, and move files in or out locally.',
+      iconKey: 'wrench',
+      accentToken: 'blue',
+      order: 4,
+      category: 'Developer Utilities',
+      supportsCopy: true,
+      status: 'active',
+      keywords: ['xml', 'formatter', 'minify', 'json'],
+      supportedActions: [
+        {
+          toolId: 'xml',
+          actionId: 'format-xml',
+          label: 'Format XML',
+          mode: 'format',
+          inputFields: ['inputValue', 'indentSize'],
+          resultKind: 'text',
+          helperText: 'Beautify valid XML using 2-space, 3-space, or 4-space indentation.'
+        },
+        {
+          toolId: 'xml',
+          actionId: 'minify-xml',
+          label: 'Minify XML',
+          mode: 'minify',
+          inputFields: ['inputValue'],
+          resultKind: 'text',
+          helperText: 'Remove formatting whitespace from valid XML while preserving structure.'
+        },
+        {
+          toolId: 'xml',
+          actionId: 'convert-xml-to-json',
+          label: 'Convert to JSON',
+          mode: 'convert',
+          inputFields: ['inputValue'],
+          resultKind: 'text',
+          helperText: 'Convert valid XML into a deterministic JSON representation.'
+        }
+      ]
     })
   ])
 );
