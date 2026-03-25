@@ -25,6 +25,7 @@ export default function XmlPage() {
         </>
       }
       description={tool.description}
+      layoutWidth="wide"
       title={tool.name}
     >
       <XmlTool />

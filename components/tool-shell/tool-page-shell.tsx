@@ -10,6 +10,7 @@ type ToolPageShellProps = {
   children: ReactNode;
   description: string;
   eyebrow?: string;
+  layoutWidth?: 'default' | 'wide';
   title: string;
 };
 
@@ -19,10 +20,11 @@ export function ToolPageShell({
   children,
   description,
   eyebrow = 'Developer Utility',
+  layoutWidth = 'default',
   title
 }: Readonly<ToolPageShellProps>) {
   return (
-    <main className={`site-shell ${styles.shell}`}>
+    <main className={`site-shell ${styles.shell}`} data-layout-width={layoutWidth}>
       <section className={`surface-card ${styles.header}`} data-accent={accent}>
         <div className={styles.headerTop}>
           <span className={styles.eyebrow}>{eyebrow}</span>

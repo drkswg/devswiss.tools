@@ -4,6 +4,7 @@ const compactXml = '<root><item id="1">alpha</item><item id="2"><name>beta</name
 
 test.describe('XML formatter tool', () => {
   test('formats XML in a two-pane desktop layout and downloads XML output', async ({ page, runAxe }) => {
+    await page.setViewportSize({ width: 1600, height: 1200 });
     await page.goto('/tools/xml');
 
     const sourceWorkflow = page.getByRole('region', { name: /XML source workflow/i });
@@ -20,8 +21,12 @@ test.describe('XML formatter tool', () => {
     expect(sourceTextareaBox).not.toBeNull();
     expect(outputTextareaBox).not.toBeNull();
     expect((sourceBox?.x ?? 0) < (outputBox?.x ?? 0)).toBe(true);
+    expect((sourceBox?.width ?? 0) > 700).toBe(true);
+    expect((outputBox?.width ?? 0) > 700).toBe(true);
     expect(Math.abs((sourceTextareaBox?.y ?? 0) - (outputTextareaBox?.y ?? 0)) < 8).toBe(true);
     expect(Math.abs((sourceTextareaBox?.height ?? 0) - (outputTextareaBox?.height ?? 0)) < 8).toBe(true);
+    expect((sourceTextareaBox?.height ?? 0) > 420).toBe(true);
+    expect((outputTextareaBox?.height ?? 0) > 420).toBe(true);
 
     await sourceTextarea.fill(compactXml);
     await page.getByLabel(/Format indentation/i).selectOption('4');
@@ -33,6 +38,9 @@ test.describe('XML formatter tool', () => {
         '\n'
       )
     );
+    await expect(page.getByTestId('xml-source-highlight').locator('.tokenTagName').first()).toBeVisible();
+    await expect(page.getByTestId('xml-output-highlight')).toHaveAttribute('data-highlight-language', 'xml');
+    await expect(page.getByTestId('xml-output-highlight').locator('.tokenAttributeValue').first()).toBeVisible();
 
     const downloadPromise = page.waitForEvent('download');
     await page.getByRole('button', { name: /Download XML/i }).click();
@@ -74,6 +82,9 @@ test.describe('XML formatter tool', () => {
   }
 }`);
     await expect(page.getByRole('button', { name: /Download XML/i })).toHaveCount(0);
+    await expect(page.getByTestId('xml-output-highlight')).toHaveAttribute('data-highlight-language', 'json');
+    await expect(page.getByTestId('xml-output-highlight').locator('.tokenKey').first()).toBeVisible();
+    await expect(page.getByTestId('xml-output-highlight').locator('.tokenString').nth(1)).toBeVisible();
     await runAxe('main');
   });
 
@@ -98,5 +109,7 @@ test.describe('XML formatter tool', () => {
     expect((sourceBox?.y ?? 0) < (outputBox?.y ?? 0)).toBe(true);
     expect(Math.abs((sourceTextareaBox?.x ?? 0) - (outputTextareaBox?.x ?? 0)) < 8).toBe(true);
     expect((sourceTextareaBox?.y ?? 0) < (outputTextareaBox?.y ?? 0)).toBe(true);
+    expect((sourceTextareaBox?.height ?? 0) > 300).toBe(true);
+    expect((outputTextareaBox?.height ?? 0) > 300).toBe(true);
   });
 });

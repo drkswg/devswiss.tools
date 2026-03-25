@@ -11,7 +11,7 @@ describe('XML tool flow', () => {
   });
 
   it('formats XML into the output pane without overwriting the source', async () => {
-    const { user, getByLabelText, getByRole, getByText } = renderIntegration(<XmlTool />);
+    const { user, getByLabelText, getByRole, getByTestId, getByText } = renderIntegration(<XmlTool />);
 
     await user.type(getByLabelText(/Original XML/i), compactXml);
     await user.selectOptions(getByLabelText(/Format indentation/i), '4');
@@ -24,10 +24,14 @@ describe('XML tool flow', () => {
         '\n'
       )
     );
+    expect(getByTestId('xml-source-highlight')).toHaveAttribute('data-highlight-language', 'xml');
+    expect(getByTestId('xml-source-highlight').innerHTML).toContain('tokenTagName');
+    expect(getByTestId('xml-output-highlight')).toHaveAttribute('data-highlight-language', 'xml');
+    expect(getByTestId('xml-output-highlight').innerHTML).toContain('tokenAttributeName');
   });
 
   it('converts XML to JSON and hides XML download for JSON output', async () => {
-    const { user, getByLabelText, getByRole, queryByRole } = renderIntegration(<XmlTool />);
+    const { user, getByLabelText, getByRole, getByTestId, queryByRole } = renderIntegration(<XmlTool />);
 
     await user.type(getByLabelText(/Original XML/i), compactXml);
     await user.click(getByRole('button', { name: /XML to JSON/i }));
@@ -51,6 +55,9 @@ describe('XML tool flow', () => {
   }
 }`);
     expect(queryByRole('button', { name: /Download XML/i })).not.toBeInTheDocument();
+    expect(getByTestId('xml-output-highlight')).toHaveAttribute('data-highlight-language', 'json');
+    expect(getByTestId('xml-output-highlight').innerHTML).toContain('tokenKey');
+    expect(getByTestId('xml-output-highlight').innerHTML).toContain('tokenString');
   });
 
   it('copies source and transformed output with feedback', async () => {

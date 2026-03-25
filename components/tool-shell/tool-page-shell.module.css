@@ -2,6 +2,10 @@
   padding-block: clamp(1.25rem, 3vw, 2rem) clamp(2.5rem, 7vw, 4rem);
 }
 
+.shell[data-layout-width='wide'] {
+  --max-shell-width: 104rem;
+}
+
 .header {
   display: grid;
   gap: var(--space-md);

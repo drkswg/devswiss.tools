@@ -3,6 +3,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: stretch;
   gap: var(--space-xl);
+  min-height: clamp(52rem, 84vh, 76rem);
 }
 
 .pane {
@@ -11,7 +12,7 @@
   align-items: start;
   min-width: 0;
   padding: clamp(1.25rem, 3vw, 1.75rem);
-  min-height: clamp(42rem, 78vh, 58rem);
+  min-height: clamp(44rem, 82vh, 70rem);
 }
 
 .paneHeader {
@@ -58,19 +59,119 @@
   min-height: 0;
 }
 
-.textarea {
-  min-height: clamp(22rem, 45vh, 36rem);
+.editorSurface {
+  position: relative;
+  min-height: 0;
   block-size: 100%;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0)),
+    color-mix(in srgb, var(--color-bg-field) 88%, black);
+  overflow: hidden;
+}
+
+.editorSurface:hover {
+  border-color: var(--color-border-strong);
+}
+
+.editorSurface:focus-within {
+  border-color: var(--color-info);
+  box-shadow: var(--focus-ring);
+}
+
+.editorSurfaceReadonly {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
+    color-mix(in srgb, var(--color-bg-field) 76%, black);
+}
+
+.editorSurfaceError {
+  border-color: var(--color-danger);
+}
+
+.highlightLayer,
+.textarea {
+  min-height: clamp(26rem, 56vh, 46rem);
   inline-size: 100%;
-  resize: vertical;
+  block-size: 100%;
+  margin: 0;
+  padding: 1rem 1.05rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  letter-spacing: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.highlightLayer {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  color: var(--color-text-primary);
+  pointer-events: none;
+}
+
+.highlightLayer code {
+  display: block;
+  min-block-size: 100%;
 }
 
 .editorTextarea {
-  block-size: 100%;
+  position: relative;
+  z-index: 1;
+  border: 0;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--color-text-primary);
+  resize: none;
 }
 
-.textarea[readonly] {
-  background: color-mix(in srgb, var(--color-bg-field) 80%, black);
+.editorTextarea::selection {
+  color: transparent;
+}
+
+.editorTextarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.editorTextarea[readonly] {
+  background: transparent;
+}
+
+:global(.tokenPunctuation) {
+  color: #b9c9ff;
+}
+
+:global(.tokenTagName),
+:global(.tokenMeta) {
+  color: #7fbaf6;
+}
+
+:global(.tokenAttributeName),
+:global(.tokenKey) {
+  color: #f6d66b;
+}
+
+:global(.tokenAttributeValue),
+:global(.tokenString) {
+  color: #9ae3ac;
+}
+
+:global(.tokenNumber) {
+  color: #f6b26b;
+}
+
+:global(.tokenBoolean),
+:global(.tokenNull) {
+  color: #f29db6;
+}
+
+:global(.tokenComment),
+:global(.tokenText) {
+  color: var(--color-text-secondary);
 }
 
 .fileInput {
@@ -84,10 +185,11 @@
 @media (max-width: 1080px) {
   .layout {
     grid-template-columns: 1fr;
+    min-height: auto;
   }
 
   .pane {
-    min-height: auto;
+    min-height: clamp(36rem, 72vh, 52rem);
   }
 }
 
@@ -98,7 +200,23 @@
     display: grid;
   }
 
+  .highlightLayer,
   .textarea {
-    min-height: clamp(18rem, 52vh, 28rem);
+    min-height: clamp(20rem, 48vh, 30rem);
+  }
+
+  .pane {
+    min-height: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .highlightLayer {
+    display: none;
+  }
+
+  .editorTextarea {
+    color: CanvasText;
+    caret-color: CanvasText;
   }
 }

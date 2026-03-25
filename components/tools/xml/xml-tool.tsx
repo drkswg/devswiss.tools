@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useDeferredValue, useRef, useState, type TextareaHTMLAttributes, type UIEvent } from 'react';
 import { Braces, Copy, Download, FileUp, WandSparkles } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,7 @@ import { downloadTextFile, readTextFile } from '@/lib/utils/file';
 import type { FieldErrors, ValidationState } from '@/lib/validation/common';
 import { type XmlIndentSize, type XmlTransformMode } from '@/lib/validation/xml';
 
+import { renderHighlightedMarkup, type HighlightLanguage } from './syntax-highlighting';
 import styles from './xml-tool.module.css';
 
 type Feedback = {
@@ -30,6 +31,17 @@ const idleStatus = {
   message: 'Run format, minify, or XML to JSON to populate the output pane.'
 };
 
+type EditorSurfaceProps = {
+  describedBy?: string;
+  error?: boolean;
+  htmlFor: string;
+  language: HighlightLanguage;
+  onChange?: TextareaHTMLAttributes<HTMLTextAreaElement>['onChange'];
+  placeholder: string;
+  readOnly?: boolean;
+  value: string;
+};
+
 function resolveTone(state: ValidationState): 'error' | 'info' | 'success' | 'warning' {
   if (state === 'valid') {
     return 'success';
@@ -40,6 +52,60 @@ function resolveTone(state: ValidationState): 'error' | 'info' | 'success' | 'wa
   }
 
   return 'info';
+}
+
+function EditorSurface({
+  describedBy,
+  error = false,
+  htmlFor,
+  language,
+  onChange,
+  placeholder,
+  readOnly = false,
+  value
+}: Readonly<EditorSurfaceProps>) {
+  const highlightRef = useRef<HTMLPreElement>(null);
+  const deferredValue = useDeferredValue(value);
+  const highlightedMarkup = renderHighlightedMarkup(deferredValue, language);
+
+  function syncScroll(event: UIEvent<HTMLTextAreaElement>) {
+    if (!highlightRef.current) {
+      return;
+    }
+
+    highlightRef.current.scrollTop = event.currentTarget.scrollTop;
+    highlightRef.current.scrollLeft = event.currentTarget.scrollLeft;
+  }
+
+  return (
+    <div
+      className={`${styles.editorSurface} ${error ? styles.editorSurfaceError : ''} ${readOnly ? styles.editorSurfaceReadonly : ''}`}
+    >
+      <pre
+        aria-hidden="true"
+        className={styles.highlightLayer}
+        data-highlight-language={language}
+        data-testid={`${htmlFor}-highlight`}
+        ref={highlightRef}
+      >
+        <code dangerouslySetInnerHTML={{ __html: highlightedMarkup }} />
+      </pre>
+      <textarea
+        aria-describedby={describedBy}
+        aria-errormessage={error ? `${htmlFor}-error` : undefined}
+        aria-invalid={error || undefined}
+        className={`${styles.textarea} ${styles.editorTextarea}`}
+        id={htmlFor}
+        onChange={onChange}
+        onScroll={syncScroll}
+        placeholder={placeholder}
+        readOnly={readOnly}
+        rows={18}
+        spellCheck={false}
+        value={value}
+      />
+    </div>
+  );
 }
 
 export function XmlTool() {
@@ -186,6 +252,8 @@ export function XmlTool() {
   }
 
   const outputLabel = output?.kind === 'json' ? 'JSON output' : 'XML output';
+  const sourceDescribedBy = fieldErrors.inputValue?.[0] ? 'xml-source-hint xml-source-error' : 'xml-source-hint';
+  const outputDescribedBy = 'xml-output-hint';
 
   return (
     <div className={styles.layout}>
@@ -226,14 +294,13 @@ export function XmlTool() {
             label="Original XML"
             required
           >
-            <textarea
-              aria-describedby={fieldErrors.inputValue?.[0] ? 'xml-source-error xml-source-hint' : 'xml-source-hint'}
-              className={`${styles.textarea} ${styles.editorTextarea}`}
-              id="xml-source"
+            <EditorSurface
+              describedBy={sourceDescribedBy}
+              error={Boolean(fieldErrors.inputValue?.[0])}
+              htmlFor="xml-source"
+              language="xml"
               onChange={(event) => handleInputChange(event.target.value)}
               placeholder="<root><item id=&quot;1&quot;>value</item></root>"
-              rows={18}
-              spellCheck={false}
               value={inputValue}
             />
           </FormField>
@@ -312,13 +379,12 @@ export function XmlTool() {
             htmlFor="xml-output"
             label="Transformed output"
           >
-            <textarea
-              className={`${styles.textarea} ${styles.editorTextarea}`}
-              id="xml-output"
+            <EditorSurface
+              describedBy={outputDescribedBy}
+              htmlFor="xml-output"
+              language={output?.kind === 'json' ? 'json' : 'xml'}
               placeholder="Formatted XML or JSON will appear here."
               readOnly
-              rows={18}
-              spellCheck={false}
               value={output?.value ?? ''}
             />
           </FormField>
