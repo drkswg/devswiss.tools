@@ -175,7 +175,7 @@ export const toolRegistry = Object.freeze(
       description: 'Beautify XML, minify it, convert it to JSON, and move files in or out locally.',
       iconKey: 'wrench',
       accentToken: 'blue',
-      order: 5,
+      order: 6,
       category: 'Developer Utilities',
       supportsCopy: true,
       status: 'active',
@@ -207,6 +207,39 @@ export const toolRegistry = Object.freeze(
           inputFields: ['inputValue'],
           resultKind: 'text',
           helperText: 'Convert valid XML into a deterministic JSON representation.'
+        }
+      ]
+    }),
+    createToolDefinition({
+      id: 'timestamp',
+      slug: 'timestamp',
+      name: 'Timestamp Converter',
+      description: 'Explain Unix timestamps or convert date and time values into seconds or milliseconds locally.',
+      iconKey: 'clock',
+      accentToken: 'yellow',
+      order: 5,
+      category: 'Scheduling',
+      supportsCopy: true,
+      status: 'active',
+      keywords: ['timestamp', 'unix', 'epoch', 'datetime'],
+      supportedActions: [
+        {
+          toolId: 'timestamp',
+          actionId: 'explain-timestamp',
+          label: 'Explain timestamp',
+          mode: 'convert',
+          inputFields: ['rawTimestamp', 'inputUnit'],
+          resultKind: 'text',
+          helperText: 'Use auto-detect for the common case, or force seconds or milliseconds when a value is ambiguous.'
+        },
+        {
+          toolId: 'timestamp',
+          actionId: 'generate-timestamp',
+          label: 'Generate timestamp',
+          mode: 'convert',
+          inputFields: ['dateTime', 'timezone', 'outputUnit'],
+          resultKind: 'text',
+          helperText: 'Interpret the entered wall-clock time as UTC or Local, then output seconds or milliseconds.'
         }
       ]
     })

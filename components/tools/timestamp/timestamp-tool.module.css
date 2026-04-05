@@ -1,0 +1,111 @@
+.layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--space-xl);
+}
+
+.workflowColumn {
+  display: grid;
+  align-content: start;
+  gap: var(--space-xl);
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.header {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.guidance {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(215, 176, 53, 0.26);
+  border-radius: var(--radius-md);
+  background: rgba(215, 176, 53, 0.1);
+}
+
+.guidanceTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-foreground);
+}
+
+.guidanceCopy {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.details {
+  display: grid;
+  gap: var(--space-sm);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.detailList {
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.detailRow {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.detailLabel {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.detailValue {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.mono {
+  font-family: var(--font-geist-mono), monospace;
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 1080px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    display: grid;
+  }
+}

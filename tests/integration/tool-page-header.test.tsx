@@ -2,6 +2,7 @@ import Base64Page from '@/app/tools/base64/page';
 import BcryptPage from '@/app/tools/bcrypt/page';
 import CronPage from '@/app/tools/cron/page';
 import HashPage from '@/app/tools/hash/page';
+import TimestampPage from '@/app/tools/timestamp/page';
 import UuidPage from '@/app/tools/uuid/page';
 import XmlPage from '@/app/tools/xml/page';
 import { getRequiredToolBySlug } from '@/lib/tools/registry';
@@ -42,10 +43,18 @@ const toolPages = [
   {
     helperText:
       'Generate either a 5-field cron expression or a 6-field expression with seconds. A fixed hour with "*" minutes, and "*" seconds in 6-field mode, means the whole hour. Single daily runs need explicit time values such as "0 0 * * *" or "0 0 0 * * *".',
-    nextHref: '/tools/xml',
-    nextLabel: 'Next: XML',
+    nextHref: '/tools/timestamp',
+    nextLabel: 'Next: Timestamp',
     page: CronPage,
     tool: getRequiredToolBySlug('cron')
+  },
+  {
+    helperText:
+      'Paste signed Unix timestamps to resolve their units, or generate seconds or milliseconds from an explicit UTC or local date-time.',
+    nextHref: '/tools/xml',
+    nextLabel: 'Next: XML',
+    page: TimestampPage,
+    tool: getRequiredToolBySlug('timestamp')
   },
   {
     helperText:

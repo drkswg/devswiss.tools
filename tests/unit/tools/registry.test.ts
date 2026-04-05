@@ -64,6 +64,14 @@ describe('Tool registry invariants', () => {
     expect(bcryptTool.supportsCopy).toBe(true);
     expect(bcryptTool.order).toBe(3);
   });
+
+  it('includes the timestamp tool in the registry with the expected route and copy support', () => {
+    const timestampTool = getRequiredToolBySlug('timestamp');
+
+    expect(timestampTool.routePath).toBe('/tools/timestamp');
+    expect(timestampTool.supportsCopy).toBe(true);
+    expect(timestampTool.order).toBe(5);
+  });
 });
 
 describe('Tool metadata derivation', () => {
