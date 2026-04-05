@@ -1,5 +1,7 @@
 import type { MetadataRoute } from 'next';
 
+import { siteIconPath } from '@/lib/tools/metadata';
+
 export const dynamic = 'force-static';
 
 export default function manifest(): MetadataRoute.Manifest {
@@ -11,6 +13,13 @@ export default function manifest(): MetadataRoute.Manifest {
     display: 'standalone',
     background_color: '#1e1f22',
     theme_color: '#1e1f22',
+    icons: [
+      {
+        src: siteIconPath,
+        sizes: '1024x1024',
+        type: 'image/png'
+      }
+    ],
     categories: ['developer', 'productivity', 'utilities'],
     lang: 'en',
     orientation: 'portrait-primary'

@@ -5,6 +5,7 @@ import type { ToolDefinition } from '@/lib/tools/contracts';
 export const siteName = 'devswiss.tools';
 export const siteDescription =
   'Elegant browser-first utilities for UUIDs, Base64 transforms, XML formatting, hashing, and cron expression workflows.';
+export const siteIconPath = '/icon.png';
 
 export const siteMetadata: Metadata = {
   applicationName: siteName,
@@ -15,6 +16,11 @@ export const siteMetadata: Metadata = {
   description: siteDescription,
   keywords: ['developer tools', 'uuid', 'base64', 'xml formatter', 'hash generator', 'cron expression'],
   manifest: '/manifest.webmanifest',
+  icons: {
+    icon: siteIconPath,
+    shortcut: siteIconPath,
+    apple: siteIconPath
+  },
   openGraph: {
     title: siteName,
     description: siteDescription,
