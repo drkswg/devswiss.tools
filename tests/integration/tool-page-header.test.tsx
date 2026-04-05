@@ -2,6 +2,7 @@ import Base64Page from '@/app/tools/base64/page';
 import BcryptPage from '@/app/tools/bcrypt/page';
 import CronPage from '@/app/tools/cron/page';
 import HashPage from '@/app/tools/hash/page';
+import RegexPage from '@/app/tools/regex/page';
 import TimestampPage from '@/app/tools/timestamp/page';
 import UuidPage from '@/app/tools/uuid/page';
 import XmlPage from '@/app/tools/xml/page';
@@ -51,10 +52,18 @@ const toolPages = [
   {
     helperText:
       'Paste signed Unix timestamps to resolve their units, or generate seconds or milliseconds from an explicit UTC or local date-time.',
-    nextHref: '/tools/xml',
-    nextLabel: 'Next: XML',
+    nextHref: '/tools/regex',
+    nextLabel: 'Next: Regex',
     page: TimestampPage,
     tool: getRequiredToolBySlug('timestamp')
+  },
+  {
+    helperText:
+      'Choose Java or PL/SQL, explain the current pattern, and test the sample text only when browser execution remains exact enough to trust.',
+    nextHref: '/tools/xml',
+    nextLabel: 'Next: XML',
+    page: RegexPage,
+    tool: getRequiredToolBySlug('regex')
   },
   {
     helperText:

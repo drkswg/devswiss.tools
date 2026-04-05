@@ -175,7 +175,7 @@ export const toolRegistry = Object.freeze(
       description: 'Beautify XML, minify it, convert it to JSON, and move files in or out locally.',
       iconKey: 'wrench',
       accentToken: 'blue',
-      order: 6,
+      order: 7,
       category: 'Developer Utilities',
       supportsCopy: true,
       status: 'active',
@@ -240,6 +240,30 @@ export const toolRegistry = Object.freeze(
           inputFields: ['dateTime', 'timezone', 'outputUnit'],
           resultKind: 'text',
           helperText: 'Interpret the entered wall-clock time as UTC or Local, then output seconds or milliseconds.'
+        }
+      ]
+    }),
+    createToolDefinition({
+      id: 'regex',
+      slug: 'regex',
+      name: 'Regex Tester',
+      description: 'Explain Java or PL/SQL regex patterns, then test them against sample text with honest browser-safe feedback.',
+      iconKey: 'sparkles',
+      accentToken: 'blue',
+      order: 6,
+      category: 'Developer Utilities',
+      supportsCopy: false,
+      status: 'active',
+      keywords: ['regex', 'java', 'plsql', 'pattern'],
+      supportedActions: [
+        {
+          toolId: 'regex',
+          actionId: 'analyze-regex',
+          label: 'Analyze regex',
+          mode: 'validate',
+          inputFields: ['flavor', 'expression', 'sampleText'],
+          resultKind: 'status',
+          helperText: 'Explanation can cover more syntax than the browser can execute exactly, so unsupported constructs return explicit warnings.'
         }
       ]
     })

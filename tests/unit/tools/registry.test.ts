@@ -72,6 +72,14 @@ describe('Tool registry invariants', () => {
     expect(timestampTool.supportsCopy).toBe(true);
     expect(timestampTool.order).toBe(5);
   });
+
+  it('includes the regex tool in the registry with the expected route and order', () => {
+    const regexTool = getRequiredToolBySlug('regex');
+
+    expect(regexTool.routePath).toBe('/tools/regex');
+    expect(regexTool.supportsCopy).toBe(false);
+    expect(regexTool.order).toBe(6);
+  });
 });
 
 describe('Tool metadata derivation', () => {
