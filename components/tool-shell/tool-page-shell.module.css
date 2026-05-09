@@ -81,6 +81,18 @@
   margin-top: var(--space-lg);
 }
 
+.seoSummary {
+  margin-top: var(--space-lg);
+  max-width: var(--max-copy-width);
+  color: var(--color-text-secondary);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.seoSummary p {
+  margin: 0;
+}
+
 @media (max-width: 720px) {
   .header {
     gap: 0.85rem;

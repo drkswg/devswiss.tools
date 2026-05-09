@@ -79,13 +79,19 @@ describe('Tool page header', () => {
   it.each(toolPages)(
     'shows a compact summary header for $tool.name',
     ({ helperText, nextHref, nextLabel, page: Page, tool }) => {
-      const { getByRole, queryByText } = renderIntegration(<Page />);
+      const { container, getByLabelText, getByRole, queryByText } = renderIntegration(<Page />);
 
       expect(getByRole('heading', { name: tool.name })).toBeInTheDocument();
       expect(getByRole('link', { name: /Back to catalog/i })).toHaveAttribute('href', '/');
       expect(getByRole('link', { name: nextLabel })).toHaveAttribute('href', nextHref);
       expect(queryByText(helperText)).not.toBeInTheDocument();
       expect(queryByText(tool.description)).toBeInTheDocument();
+      expect(getByLabelText(`${tool.name} overview`)).toHaveTextContent('without sending inputs to a server');
+
+      const jsonLd = container.querySelector('script[type="application/ld+json"]');
+      expect(jsonLd).toHaveAttribute('id', `${tool.slug}-structured-data`);
+      expect(jsonLd?.textContent).toContain('"@type":"WebApplication"');
+      expect(jsonLd?.textContent).toContain(`"name":"${tool.name}"`);
     }
   );
 });

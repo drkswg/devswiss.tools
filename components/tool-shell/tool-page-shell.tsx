@@ -11,6 +11,7 @@ type ToolPageShellProps = {
   description: string;
   eyebrow?: string;
   layoutWidth?: 'default' | 'wide';
+  seoSummary?: string;
   title: string;
 };
 
@@ -21,6 +22,7 @@ export function ToolPageShell({
   description,
   eyebrow = 'Developer Utility',
   layoutWidth = 'default',
+  seoSummary,
   title
 }: Readonly<ToolPageShellProps>) {
   return (
@@ -36,6 +38,11 @@ export function ToolPageShell({
         {actions ? <div className={styles.actions}>{actions}</div> : null}
       </section>
       <section className={styles.content}>{children}</section>
+      {seoSummary ? (
+        <section aria-label={`${title} overview`} className={styles.seoSummary}>
+          <p>{seoSummary}</p>
+        </section>
+      ) : null}
     </main>
   );
 }

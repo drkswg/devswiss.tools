@@ -8,7 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'devswiss.tools',
     short_name: 'devswiss.tools',
-    description: 'Browser-first developer utilities for UUIDs, Base64 transforms, hashes, and cron expressions.',
+    description:
+      'Browser-first developer utilities for UUIDs, Base64, hashes, bcrypt, cron, timestamps, regex, and XML.',
     start_url: '/',
     display: 'standalone',
     background_color: '#1e1f22',

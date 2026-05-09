@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
 
+import { JsonLd } from '@/components/seo/json-ld';
 import { Hero } from '@/components/marketing/hero';
 import { ToolCatalog } from '@/components/marketing/tool-catalog';
-import { siteDescription, siteName } from '@/lib/tools/metadata';
+import { siteDescription, siteName, siteOgImagePath } from '@/lib/tools/metadata';
 import { getAllTools } from '@/lib/tools/registry';
+import { buildHomepageStructuredData } from '@/lib/tools/structured-data';
 
 const homepageTools = getAllTools();
 const homepageKeywords = Array.from(new Set(homepageTools.flatMap((tool) => tool.keywords)));
+const homepageStructuredData = buildHomepageStructuredData(homepageTools);
 
 const mainStyles = {
   display: 'grid',
@@ -24,13 +27,21 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteName,
     description: siteDescription,
+    images: [siteOgImagePath],
     url: '/'
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteName,
+    description: siteDescription,
+    images: [siteOgImagePath]
   }
 };
 
 export default function HomePage() {
   return (
     <main className="site-shell" style={mainStyles}>
+      <JsonLd data={homepageStructuredData} id="homepage-structured-data" />
       <Hero />
       <ToolCatalog
         description="Generate UUIDs, encode Base64 text, format XML, create hashes, and build cron expressions directly in the browser."

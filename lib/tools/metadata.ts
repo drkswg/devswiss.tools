@@ -3,12 +3,15 @@ import type { Metadata, Viewport } from 'next';
 import type { ToolDefinition } from '@/lib/tools/contracts';
 
 export const siteName = 'devswiss.tools';
+export const siteUrl = 'https://devswiss.tools';
 export const siteDescription =
   'Elegant browser-first utilities for UUIDs, Base64 transforms, XML formatting, hashing, and cron expression workflows.';
 export const siteIconPath = '/icon.png';
+export const siteOgImagePath = siteIconPath;
 
 export const siteMetadata: Metadata = {
   applicationName: siteName,
+  metadataBase: new URL(siteUrl),
   title: {
     default: siteName,
     template: `%s | ${siteName}`
@@ -24,13 +27,27 @@ export const siteMetadata: Metadata = {
   openGraph: {
     title: siteName,
     description: siteDescription,
+    images: [siteOgImagePath],
     siteName,
-    type: 'website'
+    type: 'website',
+    url: '/'
   },
   twitter: {
     card: 'summary_large_image',
     title: siteName,
-    description: siteDescription
+    description: siteDescription,
+    images: [siteOgImagePath]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1
+    }
   }
 };
 
@@ -72,26 +89,61 @@ export function deriveToolRoutePath(tool: Pick<ToolDefinition, 'routePath' | 'sl
   return routePath;
 }
 
-export function buildToolMetadata(tool: Pick<ToolDefinition, 'description' | 'name' | 'routePath' | 'slug'>): Metadata {
+export function buildCanonicalUrl(pathname: string): string {
+  const normalizedPath = pathname.startsWith('/') ? pathname : `/${pathname}`;
+
+  return new URL(normalizedPath, siteUrl).toString();
+}
+
+export function buildToolSeoSummary(
+  tool: Pick<ToolDefinition, 'description' | 'name' | 'supportedActions'>
+): string {
+  const actionLabels = tool.supportedActions.map((action) => action.label.toLowerCase());
+  const actionSummary =
+    actionLabels.length > 0
+      ? ` It supports ${new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(actionLabels)} without sending inputs to a server.`
+      : ' It runs entirely in the browser without sending inputs to a server.';
+
+  return `${tool.name} is a browser-local utility for developer workflows. ${tool.description}${actionSummary}`;
+}
+
+export function buildToolMetadata(
+  tool: Pick<ToolDefinition, 'description' | 'name' | 'routePath' | 'slug'> & Pick<Partial<ToolDefinition>, 'keywords'>
+): Metadata {
   const canonicalRoute = deriveToolRoutePath(tool);
+  const title = `${tool.name} | ${siteName}`;
 
   return {
     title: tool.name,
     description: tool.description,
+    keywords: tool.keywords ?? [],
     alternates: {
       canonical: canonicalRoute
     },
     openGraph: {
-      title: `${tool.name} | ${siteName}`,
+      title,
       description: tool.description,
+      images: [siteOgImagePath],
       url: canonicalRoute,
       siteName,
       type: 'website'
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${tool.name} | ${siteName}`,
-      description: tool.description
+      title,
+      description: tool.description,
+      images: [siteOgImagePath]
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+        'max-video-preview': -1
+      }
     }
   };
 }
