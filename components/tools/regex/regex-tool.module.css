@@ -50,13 +50,16 @@
 
 .results {
   display: grid;
+  align-items: start;
   gap: var(--space-lg);
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .resultCard {
   display: grid;
+  align-content: start;
   gap: var(--space-lg);
+  min-width: 0;
   padding: 1rem;
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-lg);
@@ -91,6 +94,7 @@
   border: 1px solid rgba(240, 201, 109, 0.24);
   background: rgba(240, 201, 109, 0.08);
   color: var(--color-foreground-strong);
+  overflow-wrap: anywhere;
 }
 
 .detailGrid {
@@ -114,11 +118,13 @@
 .detailValue {
   margin: 0;
   color: var(--color-foreground-strong);
+  overflow-wrap: anywhere;
 }
 
 .mono {
   font-family: var(--font-mono, monospace);
   word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .matches {
@@ -147,6 +153,7 @@
   margin: 0;
   padding-left: 1.1rem;
   color: var(--color-foreground-muted);
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 900px) {

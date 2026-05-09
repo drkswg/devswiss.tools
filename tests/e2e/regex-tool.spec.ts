@@ -47,6 +47,33 @@ test.describe('Regex tool', () => {
     await expect(matchRegion).not.toContainText('Match 1');
   });
 
+  test('keeps match details compact when the explanation is long', async ({ page }) => {
+    await page.setViewportSize({ width: 1100, height: 900 });
+    await page.goto('/tools/regex');
+
+    await page
+      .getByLabel(/^Regex expression/i)
+      .fill('^(?<=ID-)(?:\\p{L}{2,4}|[A-Z&&[^Q]]{3})-(\\d{2,5}+)_([a-z]+?)\\s+\\w+\\.\\n(foo|bar)?$');
+    await page.getByLabel(/^Sample text/i).fill('ID-ABC-123_name word.\nfoo');
+    await page.getByRole('button', { name: /Analyze regex/i }).click();
+
+    const explanation = page.getByRole('region', { name: /Regex explanation/i });
+    const matches = page.getByRole('region', { name: /Regex match details/i });
+    const warning = matches.getByRole('status');
+    const explanationBox = await explanation.boundingBox();
+    const matchesBox = await matches.boundingBox();
+    const warningBox = await warning.boundingBox();
+
+    expect(explanationBox).not.toBeNull();
+    expect(matchesBox).not.toBeNull();
+    expect(warningBox).not.toBeNull();
+    expect((matchesBox?.x ?? 0) > (explanationBox?.x ?? 0)).toBe(true);
+    expect(Math.abs((matchesBox?.y ?? 0) - (explanationBox?.y ?? 0)) < 8).toBe(true);
+    expect(matchesBox?.height ?? 0).toBeLessThan((explanationBox?.height ?? 0) * 0.65);
+    expect(warningBox?.height ?? 0).toBeLessThan(140);
+    await expect(matches).toContainText('Lookbehind assertions are explained');
+  });
+
   test('stacks the explanation and match sections on a narrow viewport', async ({ page }) => {
     await page.setViewportSize({ width: 700, height: 1200 });
     await page.goto('/tools/regex');
