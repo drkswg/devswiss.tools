@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 
 import type { ToolDefinition } from '@/lib/tools/contracts';
 
-export const siteName = 'devswiss.tools';
+export const siteName = 'Developer\'s Swiss Tool';
 export const siteUrl = 'https://devswiss.tools';
 export const siteDescription =
   'Elegant browser-first utilities for UUIDs, Base64 transforms, XML formatting, hashing, and cron expression workflows.';
@@ -17,7 +17,10 @@ export const siteMetadata: Metadata = {
     template: `%s | ${siteName}`
   },
   description: siteDescription,
-  keywords: ['developer tools', 'uuid', 'base64', 'xml formatter', 'hash generator', 'cron expression'],
+  keywords: [
+      'developer tools', 'uuid', 'base64', 'xml formatter', 'hash generator', 'cron expression', 'bcryp hash generator',
+      'timestamp converter', 'regex tester', 'timestamp', 'regex', 'hash', 'bcrypt', 'cron', 'xml', 'regexp'
+  ],
   manifest: '/manifest.webmanifest',
   icons: {
     icon: siteIconPath,
